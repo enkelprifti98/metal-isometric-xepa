@@ -14,7 +14,7 @@ TLDR: Custom iPXE + Rescue mode / Alpine Linux + KVM hypervisor + IOMMU / VFIO P
 
 Equinix Metal provides the option of deploying instances with the `Custom iPXE` Operating System which is effectively a bare metal node with empty local disks.
 
-Once provisioned, we can then switch over the `Rescue mode` which reboots the server into an in-memory Alpine Linux environment.
+Once provisioned, we can then switch over to the `Rescue mode` which reboots the server into an in-memory Alpine Linux environment.
 
 Insine Alpine Linux, a set of packages are installed to provide a GUI interface with a web browser and KVM hypervisor.
 
