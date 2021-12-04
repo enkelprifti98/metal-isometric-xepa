@@ -311,4 +311,6 @@ Once the server has rebooted succesfully, you should be able to access it via RD
 
 ![windows-rdp-session](/images/windows-rdp-session.png)
 
+It's recommended to configure LACP bonding for the server's network interfaces if the operating system supports it.
+
 At this point you're all set!
