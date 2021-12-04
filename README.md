@@ -42,6 +42,7 @@ Profit???
   - [Serial console](#serial-console)
   - [Remote access](#remote-access)
 - [Rebooting to the physical host](#rebooting-to-the-physical-host)
+- [Troubleshooting](#troubleshooting)
 
 ### Provision an Equinix Metal instance with Custom iPXE
 
