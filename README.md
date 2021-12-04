@@ -223,7 +223,7 @@ At this point you can proceed with the installation process and you will notice 
 
 ![windows-installation-storage-selection](/images/windows-installation-storage-selection.png)
 
-Once the installation has completed the VM will reboot into the operating system that was writted to the local server disk.
+Once the installation has completed the VM will reboot into the operating system that was written to the local server disk.
 
 ![windows-desktop](/images/windows-desktop.png)
 
