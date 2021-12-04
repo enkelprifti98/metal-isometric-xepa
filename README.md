@@ -321,6 +321,8 @@ console="comconsole,vidconsole"
 comconsole_port=0x2F8
 ```
 
+Restart the virtual machine after you have configured the serial console settings inside the operating system for them to take effect.
+
 To confirm that you have configured serial console output properly inside the operating system, you can open the terminal shell and run the following command:
 
 ```
