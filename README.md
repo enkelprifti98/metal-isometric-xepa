@@ -28,9 +28,9 @@ Profit???
 
 ## Contents
 
-- [Provision an Equinix Metal instance with Custom iPXE](#Provision an Equinix Metal instance with Custom iPXE)
-- [Switch the instance to Rescue Mode](#Switch the instance to Rescue Mode)
-- [Run the ISO installation environment setup script](#Run the ISO installation environment setup script)
+- [Provision an Equinix Metal instance with Custom iPXE](#provision-an-equinix-metal-instance-with-custom-ipxe)
+- [Switch the instance to Rescue Mode](#switch-the-instance-to-rescue-mode)
+- [Run the ISO installation environment setup script](#run-the-iso-installation-environment-setup-script)
 
 
 ### Provision an Equinix Metal instance with Custom iPXE
