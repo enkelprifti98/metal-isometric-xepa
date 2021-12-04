@@ -158,6 +158,8 @@ Click the `Forward` button.
 
 The next step is configuring storage for the VM. On the storage configuration window, choose the `Select or create custom storage` option. There is an empty field below the option where we have to set the local server storage disk device path.
 
+![virt-manager-storage](/images/virt-manager-storage.png)
+
 To look at the available local disks, open the terminal application at the dock on the bottom of the screen.
 
 ![launch-terminal](/images/launch-terminal.png)
