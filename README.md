@@ -239,7 +239,7 @@ In some cases the operating system will already include a working driver as part
 
 If the OS does not contain the driver as part of the ISO image, it may be able to install the driver automatically through the internet. If not, you will need to download the driver manually through the networking card vendor driver download web pages as long as they support your operating system.
 
-In the case of Microsoft Windows 10, the ISO image does not include drivers for my servers' networking card so I will be installing the driver through Windows Update via the internet. Looking at Device Manager, you will see the `Ethernet Controller` device that has no driver installed. That is the physical PCI networking card of the server that we passed to the VM.
+In the case of Microsoft Windows 10, the ISO image does not include drivers for my servers' networking card so I will be installing the driver through Windows Update via the internet. Looking at Device Manager, you will see the `Ethernet Controller` device that has no driver installed. That is the physical server PCI networking card that we passed to the VM.
 
 ![windows-device-manager-missing-nic-driver](/images/windows-device-manager-missing-nic-driver.png)
 
