@@ -239,7 +239,7 @@ Once you have found it you will see 2 or 4 devices with the same name which repr
 0000:41:00:1 ... Ethernet Controller ... (interface eth1)
 ```
 
-You cannot use the first device / interface eth0 as that is being used by the Rescue Mode environment for internet access. Therefore you need to choose any other interface so I will be using the second PCI device network card or interface eth1.
+*You cannot use the first device / interface eth0 as that is being used by the Rescue Mode environment for internet access. Therefore you need to choose any other interface so I will be using the second PCI device network card or interface eth1.*
 
 ![virt-manager-pci-device](/images/virt-manager-pci-device.png)
 
