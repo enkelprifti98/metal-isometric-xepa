@@ -391,11 +391,9 @@ Then you need to provide the local storage device path where the operating syste
 
 Search for your operating system or `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select your specific OS or the `Generic default (generic)` option if nothing matches your OS. If your image is using a popular operating system under the hood such as Debian or Redhat, you can also choose those as the operating system instead of the generic option.
 
-You can proceed with the rest of the VM configuration settings as shown in the following sections of the guide:
+You can proceed with the rest of the VM hardware configuration settings and select the `Customize configuration before install` option and click the `Finish` button.
 
-- [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
-- [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
-- [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
+A new overview window will appear where you can see the different hardware components of the virtual machine. Add the [serial consoles](#add-serial-consoles-to-the-virtual-machine) and the [PCI networking card](#attach-a-pci-device-to-the-virtual-machine) to the virtual machine.
 
 Once you have configured the VM settings you can click the `Begin Installation` button to start the VM. You can refer to the following sections of the guide to troubleshoot:
 
