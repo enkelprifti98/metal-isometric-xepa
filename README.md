@@ -330,6 +330,10 @@ where `win10` is the name of my virtual machine. In your case the name of the VM
 
 ![virt-manager-vm-name](/images/virt-manager-vm-name.png)
 
+Note that `serial1` is the alias name of the second serial device (`Serial 2`) we added to the VM which corresponds to `COM2`. If you need to double check the alias name you can do so by viewing the XML settings of the serial device and look for `<alias name="serial1"/>`. The `Serial 2` device should also be using port 1 in `<target type="isa-serial" port="1">`.
+
+On the other hand, the `Serial 1` device has alias name of `<alias name="serial0"/>` and is using port 0 in `<target type="isa-serial" port="0">` which corresponds to `COM1` or `0x3F8`. We need to be using the second serial device/port instead since that is what Equinix Metal uses for the Out-of-Band console.
+
 You should be able to see output and also send keyboard input to the VM through the serial console. If you're not able to see any output you need to go back and adjust the operating system configuration.
 
 #### Remote access
