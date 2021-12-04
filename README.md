@@ -198,7 +198,7 @@ On the last page, select the `Customize configuration before install` option and
 
 ![virt-manager-customize-config-before-install](/images/virt-manager-customize-config-before-install.png)
 
-A new overview window will appear where you can see the different components of the virtual machine.
+A new overview window will appear where you can see the different hardware components of the virtual machine.
 
 ### Add serial consoles to the Virtual Machine
 
