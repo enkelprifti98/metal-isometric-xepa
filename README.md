@@ -120,7 +120,7 @@ The Virtual Machine Manager application will look like the following image. Star
 
 ![virt-manager](/images/virt-manager.png)
 
-You will get a prompt asking how you would like to install the operating system. Choose the `Local install media (ISO image or CDROM)` option.
+You will get a prompt asking how you would like to install the operating system. Choose the `Local install media (ISO image or CDROM)` option and click the `Forward` button.
 
 ![virt-manager-install-media](/images/virt-manager-install-media.png)
 
