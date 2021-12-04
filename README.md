@@ -148,7 +148,7 @@ However, for other ISO images such as TrueNAS the detection may not work. You ne
 
 ![virt-manager-generic-os](/images/virt-manager-generic-os.png)
 
-After you have chosen your ISO file, click the `Forward` button. A prompt will appear saying that `The emulator may not search permissions for the path to the ISO file` and asking you to correct it now, click the `Yes` button.
+After you have chosen your ISO file, click the `Forward` button. A prompt will appear saying that `The emulator may not have search permissions for the path to the ISO file` and asking you to correct it now, click the `Yes` button.
 
 Then you need to allocate the RAM and CPU amount to the VM. I personally use 4096 MB (4 GB) and 4 CPUs but feel free to adjust those to your preference.
 
