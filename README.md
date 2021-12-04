@@ -16,7 +16,7 @@ Equinix Metal provides the option of deploying instances with the `Custom iPXE` 
 
 Once provisioned, we can then switch over to the `Rescue Mode` which reboots the server into an in-memory Alpine Linux environment.
 
-Insine Alpine Linux, a set of packages are installed to provide a GUI interface with a web browser and KVM hypervisor.
+Inside Alpine Linux, a set of packages are installed to provide a GUI interface with a web browser and KVM hypervisor.
 
 A virtual machine is created that boots the ISO with the server local disk allocated to it along with the PCI device of your choice passed through in cases where you may need to install drivers.
 
