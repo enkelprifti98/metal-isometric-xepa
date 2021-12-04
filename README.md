@@ -34,6 +34,7 @@ Profit???
 - [Access the ISO installation environment](#access-the-iso-installation-environment)
 - [Download the ISO](#download-the-iso)
 - [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
+- [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
 - [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
 - [Install the Operating System](#install-the-operating-system)
 - [Post installation configuration](#post-installation-configuration)
