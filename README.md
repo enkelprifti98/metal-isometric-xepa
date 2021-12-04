@@ -233,7 +233,7 @@ After the operating system has been installed there are a few things to keep in 
 
 #### Networking driver
 
-We need to make sure that operating system has a working driver for the networking card so the server can get internet access and be managed remotely.
+We need to make sure that the operating system has a working driver for the networking card so the server can get internet access and be managed remotely.
 
 In some cases the operating system will already include a working driver as part of the vanilla ISO image installation.
 
