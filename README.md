@@ -155,3 +155,152 @@ Then you need to allocate the RAM and CPU amount to the VM. I personally use 409
 ![virt-manager-ram-cpu-settings](/images/virt-manager-ram-cpu-settings.png)
 
 Click the `Forward` button.
+
+The next step is configuring storage for the VM. On the storage configuration window, choose the `Select or create custom storage` option. There is an empty field below the option where we have to set the local server storage disk device path.
+
+To look at the available local disks, open the terminal application at the dock on the bottom of the screen.
+
+![launch-terminal](/images/launch-terminal.png)
+
+Inside the terminal window, type `lsblk -p` and press `Enter`. It will show the list of local storage drives along with their full device path (`/dev/sdX` or `/dev/nvmeXn1`) and size.
+
+![list-storage](/images/list-storage.png)
+
+Depending on the server type you may see NVMe storage drives as well but you cannot use them as the target for the bootable operating system that we will be installing since Equinix Metal servers boot in Legacy BIOS and to use NVMe drives as bootable targets requires UEFI.
+
+I recommend using the smallest available drive which in my case are `/dev/sdc` and `/dev/sdd`. For this guide I will be using `/dev/sdc`.
+
+Type the `/dev/sdc` disk device path in the Virtual Machine Manager storage field and click the `Forward` button.
+
+![virt-manager-storage-device-path](/images/virt-manager-storage-device-path.png)
+
+On the last page, select the `Customize configuration before install` option and click the `Finish` button.
+
+![virt-manager-customize-config-before-install](/images/virt-manager-customize-config-before-install.png)
+
+A new overview window will appear where you can see the different components of the virtual machine.
+
+### Attach PCI device to the Virtual Machine
+
+The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
+
+To do this, click the `+ Add Hardware` button on the bottom left corner of the window and a new one will appear.
+
+![virt-manager-add-hardware](/images/virt-manager-add-hardware.png)
+
+On the left sidebar select the `PCI Host Device` category. On the right side you will see a large list of different PCI devices so you will need to find the networking card. Typically there will be `Ethernet controller` in the name of the PCI device so look for that.
+
+`domain number : bus number : device number : function number ... ... Ethernet Controller ... (interface ethX)`
+
+Once you have found it you will see 2 or 4 devices with the same name which represent each individual card. Equinix Metal instances typically come with 2 or 4 networking ports. If you scroll horizontally to the right side you will see `(interface eth0)` and `(interface eth1)`. This is also denoted by the PCI device function number at the beginning of the line so in my case it looks like the following:
+
+```
+0000:41:00:0 ... Ethernet Controller ... (interface eth0)
+0000:41:00:1 ... Ethernet Controller ... (interface eth1)
+```
+
+You cannot use the first device / interface eth0 as that is being used by the Rescue Mode environment for internet access. Therefore you need to choose any other interface so I will be using the second PCI device network card or interface eth1.
+
+![virt-manager-pci-device](/images/virt-manager-pci-device.png)
+
+Once you have selected the networking PCI device, click the `Finish` button.
+
+### Install the Operating System
+
+On the VM overview window click the `Begin Installation` button on the top left corner of the window to start the virtual machine.
+
+![virt-manager-begin-installation](/images/virt-manager-begin-installation.png)
+
+A new window will appear with a video console of the Virtual Machine which should show the ISO image installer. You can maximize the window by clicking the square button on the top right corner of the window.
+
+![virt-manager-maximize-window](/images/virt-manager-maximize-window.png)
+
+At this point you can proceed with the installation process and you will notice that the local server disk we allocated earlier will appear as an installation target option.
+
+![windows-installation-storage-selection](/images/windows-installation-storage-selection.png)
+
+Once the installation has completed the VM will reboot into the operating system that was writted to the local server disk.
+
+![windows-desktop](/images/windows-desktop.png)
+
+### Post installation configuration
+
+After the operating system has been installed there are a few things to keep in mind before rebooting over to the physical host that will be running the operating system.
+
+#### Networking driver
+
+We need to make sure that operating system has a working driver for the networking card so the server can get internet access and be managed remotely.
+
+In some cases the operating system will already include a working driver as part of the vanilla ISO image installation.
+
+If the OS does not contain the driver as part of the ISO image, it may be able to install the driver automatically through the internet. If not, you will need to download the driver manually through the networking card vendor driver download web pages as long as they support your operating system.
+
+In the case of Microsoft Windows 10, the ISO image does not include drivers for my servers' networking card so I will be installing the driver through Windows Update via the internet. Looking at Device Manager, you will see the `Ethernet Controller` device that has no driver installed. That is the physical PCI networking card of the server that we passed to the VM.
+
+![windows-device-manager-missing-nic-driver](/images/windows-device-manager-missing-nic-driver.png)
+
+When we check windows update, there is an optional driver ready to be downloaded over the internet for our Intel Ethernet network card.
+
+![windows-update-nic-driver-download](/images/windows-update-nic-driver-download.png)
+
+Once the driver has been downloaded and installed, you will now notice in Device Manager that the physical networking card adapter is ready. The other Intel Gigabit network adapter is a virtual network adapter emulated by the virtual machine hypervisor that provides internet access to the VM.
+
+![windows-device-manager-missing-nic-ready](/images/windows-device-manager-missing-nic-ready.png)
+
+#### Serial console
+
+The Equinix Metal Out-of-Band console is helpful in situations where the instance does not have internet access so it's a good idea to enable your operating system for serial console output. More specifically, the Out-of-Band console uses the `COM2` serial port with a baud rate of `115200`.
+
+In some cases, the operating system may have an option to enable the serial console through the GUI. If not, you may be able to do it through the following methods or other ways.
+
+For Windows, we can enable Emergency Management Services (EMS) redirection with the following commands ran in Command Prompt as an Administrator:
+
+```
+bcdedit /bootems {default} ON
+bcdedit /emssettings EMSPORT:2 EMSBAUDRATE:115200
+```
+
+![windows-enable-ems-serial-console](/images/windows-enable-ems-serial-console.png)
+
+For Linux based operating systems, you can typically enable serial console output through the GRUB bootloader kernel cmdline options found in `/etc/default/grub`. There you can add the following:
+
+```
+export GRUB_CMDLINE_LINUX='console=tty0 console=ttyS1,115200n8'
+export GRUB_SERIAL_COMMAND='serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1'
+```
+
+Once you've edited the grub config file, you can apply the change with `update-grub`.
+
+For BSD based operating systems you should be able to add serial console support by editing the `/boot/loader.conf` bootloader configuration file. Add the following to the config file:
+
+```
+boot_multicons="YES"
+boot_serial="YES"
+comconsole_speed="115200"
+console="comconsole,vidconsole"
+comconsole_port=0x2F8
+```
+
+#### Remote access
+
+After we reboot over to the physical host booting from the local disk that has our installed operating system, we need to be able to access it remotely via the public IP address. Remote access will depend on the operating system but typically it will either be RDP for Windows and SSH for almost everything else.
+
+In windows, we can enable RDP in the settings app:
+
+![windows-enable-remote-desktop](/images/windows-enable-remote-desktop.png)
+
+For other operating systems, you need to install or enable the SSH server.
+
+### Rebooting to the physical host
+
+Once we have completed the post installation steps, we can reboot over to the physical host.
+
+Shut down the virtual machine and close all running applications. Then disconnect from the VNC console or close the web browser window.
+
+Go to the Equinix Metal console server overview page, click the `Server Actions` button and select the `Reboot` action.
+
+While the server is rebooting, you can monitor it's progress through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos).
+
+Once the server has rebooted succesfully, you should be able to access it via RDP / SSH through it's public IP address or the Out-of-Band console.
+
+At this point you're all set!
