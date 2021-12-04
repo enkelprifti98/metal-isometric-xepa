@@ -297,6 +297,7 @@ The standard edition of Windows does not support serial console output but if yo
 
 ```
 bcdedit /bootems {default} ON
+bcdedit /ems {current} ON
 bcdedit /emssettings EMSPORT:2 EMSBAUDRATE:115200
 ```
 
