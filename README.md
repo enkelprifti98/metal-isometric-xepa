@@ -161,7 +161,7 @@ In my case, Microsoft Windows 10 is detected successfully.
 
 ![virt-manager-windows-detected](/images/virt-manager-windows-detected.png)
 
-However, for other ISO images such as TrueNAS the detection may not work. You need to uncheck the `Automatically detect from the installation media / source` box and search for `generic` in the operating system field. Select the `Generic default (generic)` option. If your image is using a popular operating system under the hood such as Debian or Redhat, you can also choose those as the operating system instead of the generic option.
+However, for other ISO images such as TrueNAS the detection may not work. You need to uncheck the `Automatically detect from the installation media / source` box and search for `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select the `Generic default (generic)` option. If your image is using a popular operating system under the hood such as Debian or Redhat, you can also choose those as the operating system instead of the generic option.
 
 ![virt-manager-generic-os](/images/virt-manager-generic-os.png)
 
@@ -365,3 +365,42 @@ Once the server has rebooted succesfully, you should be able to access it via RD
 It's recommended to configure LACP bonding for the server's network interfaces if the operating system supports it.
 
 At this point you're all set!
+
+### Troubleshooting
+
+In the case that you reboot over to the physical host and things such as the Out-of-Band console or remote access over the internet are not working, you can go back to the VM environment to troubleshoot.
+
+To do so, switch the server instance back to [Rescue Mode](#switch-the-instance-to-rescue-mode). Then [run the ISO installation environment setup script](#run-the-iso-installation-environment-setup-script) and [access the ISO installation environment](#access-the-iso-installation-environment) through your web browser or VNC client.
+
+Once you're back in the rescue GUI environment, launch the Virtual Machine Manager by clicking the search icon on the dock at the bottom of the screen, then type `virtual machine manager` in the search field which should show the Virtual Machine Manager application as a search result. Double click on the application to start it.
+
+![launch-virt-manager](/images/launch-virt-manager.png)
+
+Start the process of creating a Virtual Machine by clicking the monitor icon at the top left corner of the Virtual Machine Manager window.
+
+![virt-manager](/images/virt-manager.png)
+
+You will get a prompt asking how you would like to install the operating system. This time we will choose the `Import existing disk image` option and click the `Forward` button.
+
+![virt-manager-import-disk-image](/images/virt-manager-import-disk-image.png)
+
+Then you need to provide the local storage device path where the operating system was installed. This should be the same one that we used earlier which in my case was `/dev/sdc` but you can double check in the terminal with `lsblk -p` which will show several partitions under one of the storage drives.
+
+![virt-manager](/images/check-os-drive.png)
+
+Search for your operating system or `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select your specific OS or the `Generic default (generic)` option if nothing matches your OS. If your image is using a popular operating system under the hood such as Debian or Redhat, you can also choose those as the operating system instead of the generic option.
+
+You can proceed with the rest of the VM configuration settings as shown in the following sections of the guide:
+
+- [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
+- [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
+- [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
+
+Once you have configured the VM settings you can click the `Begin Installation` button to start the VM. You can refer to the following sections of the guide to troubleshoot:
+
+- [Post installation configuration](#post-installation-configuration)
+  - [Networking driver](#networking-driver)
+  - [Serial console](#serial-console)
+  - [Remote access](#remote-access)
+
+After you're done troubleshooting, you can [reboot back to the physical host](#rebooting-to-the-physical-host).
