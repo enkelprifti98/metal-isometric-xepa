@@ -386,7 +386,7 @@ You will get a prompt asking how you would like to install the operating system.
 
 Then you need to provide the local storage device path where the operating system was installed. This should be the same one that we used earlier which in my case was `/dev/sdc` but you can double check in the terminal with `lsblk -p` which will show several partitions under one of the storage drives.
 
-![virt-manager](/images/check-os-drive.png)
+![check-os-drive](/images/check-os-drive.png)
 
 Search for your operating system or `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select your specific OS or the `Generic default (generic)` option if nothing matches your OS. If your image is using a popular operating system under the hood such as Debian or Redhat, you can also choose those as the operating system instead of the generic option.
 
