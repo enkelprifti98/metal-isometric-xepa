@@ -385,7 +385,7 @@ You will get a prompt asking how you would like to install the operating system.
 
 ![virt-manager-import-disk-image](/images/virt-manager-import-disk-image.png)
 
-Then you need to provide the local storage device path where the operating system was installed. This should be the same one that we used earlier which in my case was `/dev/sdc` but you can double check in the terminal with `lsblk -p` which will show several partitions under one of the storage drives.
+Then you need to provide the local storage device path where the operating system was installed. This should be the same one that we used earlier which in my case was `/dev/sdc` but you can double check in the terminal with `lsblk -p` or `fdisk -l` which will show several partitions under one of the storage drives.
 
 ![check-os-drive](/images/check-os-drive.png)
 
