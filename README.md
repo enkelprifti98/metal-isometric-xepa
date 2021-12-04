@@ -186,7 +186,7 @@ Inside the terminal window, type `lsblk -p` and press `Enter`. It will show the 
 
 ![list-storage](/images/list-storage.png)
 
-Depending on the server type you may see NVMe storage drives as well but you cannot use them as the target for the bootable operating system that we will be installing since Equinix Metal servers boot in Legacy BIOS and to use NVMe drives as bootable targets requires UEFI.
+**Depending on the server type you may see NVMe storage drives as well but you cannot use them as the target for the bootable operating system that we will be installing since Equinix Metal servers boot in Legacy BIOS and to use NVMe drives as bootable targets requires UEFI.**
 
 I recommend using the smallest available drive which in my case are `/dev/sdc` and `/dev/sdd`. For this guide I will be using `/dev/sdc`.
 
