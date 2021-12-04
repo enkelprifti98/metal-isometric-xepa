@@ -247,7 +247,7 @@ When we check windows update, there is an optional driver ready to be downloaded
 
 Once the driver has been downloaded and installed, you will now notice in Device Manager that the physical networking card adapter is ready. The other Intel Gigabit network adapter is a virtual network adapter emulated by the virtual machine hypervisor that provides internet access to the VM.
 
-![windows-device-manager-missing-nic-ready](/images/windows-device-manager-missing-nic-ready.png)
+![windows-device-manager-nic-ready](/images/windows-device-manager-nic-ready.png)
 
 #### Serial console
 
