@@ -363,7 +363,7 @@ Once the server has rebooted succesfully, you should be able to access it via RD
 
 ![windows-rdp-session](/images/windows-rdp-session.png)
 
-In many cases, the operating system will automatically configure the network through DHCP for the first network interface only. It's recommended to configure LACP bonding for the server's network interfaces if the operating system supports it.
+In many cases the operating system will automatically configure the network through DHCP for the first network interface only. It's recommended to configure LACP bonding for the server's network interfaces if the operating system supports it.
 
 At this point you're all set!
 
