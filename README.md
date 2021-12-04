@@ -292,7 +292,7 @@ The Equinix Metal Out-of-Band console is helpful in situations where the instanc
 
 In some cases, the operating system may have an option to enable the serial console through the GUI. If not, you may be able to do it through the following methods or other ways. Depending on how the OS starts the serial port numbering, you may need to set it as port 1 or port 2 if they start from 0 or not.
 
-For Windows, we can enable Emergency Management Services (EMS) redirection with the following commands ran in Command Prompt as an Administrator:
+The standard edition of Windows does not support serial console output but if you're running Windows Server edition, we can enable Emergency Management Services (EMS) redirection with the following commands ran in Command Prompt as an Administrator:
 
 ```
 bcdedit /bootems {default} ON
@@ -319,6 +319,18 @@ comconsole_speed="115200"
 console="comconsole,vidconsole"
 comconsole_port=0x2F8
 ```
+
+To confirm that you have configured serial console output properly inside the operating system, you can open the terminal shell and run the following command:
+
+```
+virsh console win10 serial1
+```
+
+where `win10` is the name of my virtual machine. In your case the name of the VM may be different so replace it with your VM's name. You can see the VM name at the top of the running VM window.
+
+![virt-manager-vm-name](/images/virt-manager-vm-name.png)
+
+You should be able to see output and also send keyboard input to the VM through the serial console. If you're not able to see any output you need to go back and adjust the operating system configuration.
 
 #### Remote access
 
