@@ -192,7 +192,9 @@ To do this, click the `+ Add Hardware` button on the bottom left corner of the w
 
 On the left sidebar select the `PCI Host Device` category. On the right side you will see a large list of different PCI devices so you will need to find the networking card. Typically there will be `Ethernet controller` in the name of the PCI device so look for that.
 
-`domain number : bus number : device number : function number ... ... Ethernet Controller ... (interface ethX)`
+```
+domain number : bus number : device number : function number ... ... Ethernet Controller ... (interface ethX)
+```
 
 Once you have found it you will see 2 or 4 devices with the same name which represent each individual card. Equinix Metal instances typically come with 2 or 4 networking ports. If you scroll horizontally to the right side you will see `(interface eth0)` and `(interface eth1)`. This is also denoted by the PCI device function number at the beginning of the line so in my case it looks like the following:
 
