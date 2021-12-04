@@ -90,7 +90,7 @@ You can also use the VNC client of your choice and point it to the public IPv4 a
 
 In both cases, you will be prompted to connect and enter a password which will be `alpine`.
 
-Once you have logged in, you will see the desktop UI. You may get a prompt about the Power Manager Plugin but you can just close the window by click the `X` button on the top right corner of the prompt.
+Once you have logged in, you will see the desktop UI. You may get a prompt about the Power Manager Plugin but you can just close the window by clicking the `X` button on the top right corner of the prompt.
 
 ![desktop](/images/desktop.png)
 
