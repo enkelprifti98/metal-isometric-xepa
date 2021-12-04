@@ -31,7 +31,16 @@ Profit???
 - [Provision an Equinix Metal instance with Custom iPXE](#provision-an-equinix-metal-instance-with-custom-ipxe)
 - [Switch the instance to Rescue Mode](#switch-the-instance-to-rescue-mode)
 - [Run the ISO installation environment setup script](#run-the-iso-installation-environment-setup-script)
-
+- [Access the ISO installation environment](#access-the-iso-installation-environment)
+- [Download the ISO](#download-the-iso)
+- [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
+- [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
+- [Install the Operating System](#install-the-operating-system)
+- [Post installation configuration](#post-installation-configuration)
+- [Networking driver](#networking-driver)
+- [Serial console](#serial-console)
+- [Remote access](#remote-access)
+- [Rebooting to the physical host](#rebooting-to-the-physical-host)
 
 ### Provision an Equinix Metal instance with Custom iPXE
 
