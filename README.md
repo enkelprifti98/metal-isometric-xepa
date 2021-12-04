@@ -301,6 +301,8 @@ Shut down the virtual machine and close all running applications. Then disconnec
 
 Go to the Equinix Metal console server overview page, click the `Server Actions` button and select the `Reboot` action.
 
+![post-install-reboot-server](/images/post-install-reboot-server.png)
+
 While the server is rebooting, you can monitor it's progress through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos).
 
 Once the server has rebooted succesfully, you should be able to access it via RDP / SSH through it's public IP address or the Out-of-Band console.
