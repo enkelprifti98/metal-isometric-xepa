@@ -26,6 +26,13 @@ Profit???
 
 ## Guide
 
+## Contents
+
+- [Provision an Equinix Metal instance with Custom iPXE](#Provision an Equinix Metal instance with Custom iPXE)
+- [Switch the instance to Rescue Mode](#Switch the instance to Rescue Mode)
+- [Run the ISO installation environment setup script](#Run the ISO installation environment setup script)
+
+
 ### Provision an Equinix Metal instance with Custom iPXE
 
 Login to the Equinix Metal [console](https://console.equinix.com/), then click the `New Server` button to provision an instance.
