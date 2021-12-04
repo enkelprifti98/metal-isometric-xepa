@@ -182,7 +182,7 @@ On the last page, select the `Customize configuration before install` option and
 
 A new overview window will appear where you can see the different components of the virtual machine.
 
-### Attach PCI device to the Virtual Machine
+### Attach a PCI device to the Virtual Machine
 
 The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
 
