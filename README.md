@@ -198,13 +198,31 @@ On the last page, select the `Customize configuration before install` option and
 
 A new overview window will appear where you can see the different components of the virtual machine.
 
+### Add serial consoles to the Virtual Machine
+
+We need to add 2 serial console devices to the Virtual Machine so that we can enable it later after installing the Operating System. This is needed to make the Equinix Metal Out-of-Band console work.
+
+Start adding the first serial console device by clicking the `+ Add Hardware` button on the bottom left corner of the window.
+
+![virt-manager-add-hardware](/images/virt-manager-add-hardware.png)
+
+On the left sidebar select the `Serial` category. On the right side leave everything as default and click the `Finish` button.
+
+![virt-manager-add-serial-console-device](/images/virt-manager-add-serial-console-device.png)
+
+Repeat this process once again to add the second serial console device.
+
+You should see 2 serial devices on the VM overview sidebar once you have added them.
+
+![virt-manager-add-serial-console-devices](/images/virt-manager-add-serial-console-devices.png)
+
 ### Attach a PCI device to the Virtual Machine
 
 The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
 
 To do this, click the `+ Add Hardware` button on the bottom left corner of the window and a new one will appear.
 
-![virt-manager-add-hardware](/images/virt-manager-add-hardware.png)
+![virt-manager-add-hardware](/images/virt-manager-add-pci-hardware.png)
 
 On the left sidebar select the `PCI Host Device` category. On the right side you will see a large list of different PCI devices so you will need to find the networking card. Typically there will be `Ethernet controller` in the name of the PCI device so look for that.
 
