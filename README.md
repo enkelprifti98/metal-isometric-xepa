@@ -12,9 +12,9 @@ This project makes it possible to install any ISO of your choice on Equinix Meta
 
 TLDR: Custom iPXE + Rescue mode / Alpine Linux + KVM hypervisor + IOMMU / VFIO PCI Passthrough + GUI + Web Browser
 
-Equinix Metal provides the option of deploying instances with the `Custom iPXE` Operating System which is effectively a bare metal node with empty local disks.
+Equinix Metal provides the option of deploying instances with the Custom iPXE Operating System which is effectively a bare metal node with empty local disks.
 
-Once provisioned, we can then switch over to the `Rescue Mode` which reboots the server into an in-memory Alpine Linux environment.
+Once provisioned, we can then switch over to Rescue Mode which reboots the server into an in-memory Alpine Linux environment.
 
 Inside Alpine Linux, a set of packages are installed to provide a GUI interface with a web browser and KVM hypervisor.
 
