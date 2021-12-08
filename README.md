@@ -368,7 +368,7 @@ Go to the Equinix Metal console server overview page, click the `Server Actions`
 
 While the server is rebooting, you can monitor its progress through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos).
 
-Once the server has rebooted succesfully, you should be able to access it via RDP / SSH through its public IP address or the Out-of-Band console.
+Once the server has rebooted succesfully, you should be able to access it via RDP / SSH through its IP address or the Out-of-Band console.
 
 ![windows-rdp-session](/images/windows-rdp-session.png)
 
