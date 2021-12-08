@@ -348,7 +348,7 @@ You should be able to see output and also send keyboard input to the VM through 
 
 #### Remote access
 
-After we reboot over to the physical host booting from the local disk that has our installed operating system, we need to be able to access it remotely via the public IP address. Remote access will depend on the operating system but typically it will either be RDP for Windows and SSH for almost everything else.
+After we reboot over to the physical host booting from the local disk that has our installed operating system, we need to be able to access it remotely through its IP address. Remote access will depend on the operating system but typically it will either be RDP for Windows and SSH for almost everything else.
 
 In windows, we can enable RDP in the settings app:
 
