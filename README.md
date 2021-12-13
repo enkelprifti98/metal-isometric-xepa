@@ -295,7 +295,7 @@ Once the driver has been downloaded and installed, you will now notice in Device
 
 The Equinix Metal Out-of-Band console is helpful in situations where the instance does not have internet access so it's a good idea to enable your operating system for serial console output.
 
-More specifically, the Out-of-Band console uses the `COM2` serial port (I/O port `0x2F8`, IRQ 3) with a baud rate of `115200`, 8 bits, no parity, and 1 stop bit.
+More specifically, the Out-of-Band console uses the `COM2` serial port (I/O port `0x2F8`, IRQ 3) with a baud rate of `115200`, 8 data bits, no parity, and 1 stop bit.
 
 In some cases, the operating system may have an option to enable the serial console through the GUI. If not, you may be able to do it through the following methods or other ways. Depending on how the OS starts the serial port numbering, you may need to set it as port 1 or port 2 if they start from 0 or not.
 
