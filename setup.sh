@@ -2,7 +2,7 @@
 
 # Install XFCE GUI, VNC server, and other necessary packages
 
-apk add --no-cache ca-certificates curl openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils
+apk add --no-cache ca-certificates curl openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip
 
 # Set VNC password: ("alpine" but you can set it to whatever)
 
