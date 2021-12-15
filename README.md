@@ -224,7 +224,7 @@ You should see 2 serial devices on the VM overview sidebar once you have added t
 
 ### Attach a PCI device to the Virtual Machine
 
-Note: This step is optional and may not be possible on certain / legacy server types that do not support IOMMU / VFIO PCI Passthrough properly such as the [c3.small.x86](https://github.com/dlotterman/metal_code_snippets/blob/main/metal_configurations/c3_small_x86/c3_small_x86.md). If the host does not support IOMMU or has not been configured properly, virt-manager will throw errors when starting the VM with PCI devices attached. Check with the Equinix Metal support team to verify that the server BIOS settings for AMD-Vi / Intel VT-d / IOMMU have been enabled.
+**Note: This step is optional and may not be possible on certain / legacy server types that do not support IOMMU / VFIO PCI Passthrough properly such as the [c3.small.x86](https://github.com/dlotterman/metal_code_snippets/blob/main/metal_configurations/c3_small_x86/c3_small_x86.md). If the host does not support IOMMU or has not been configured properly, virt-manager will throw errors when starting the VM with PCI devices attached. Check with the Equinix Metal support team to verify that the server BIOS settings for AMD-Vi / Intel VT-d / IOMMU have been enabled.**
 
 The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
 
