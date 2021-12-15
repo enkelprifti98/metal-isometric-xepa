@@ -166,7 +166,7 @@ In my case, Microsoft Windows 10 is detected successfully.
 
 ![virt-manager-windows-detected](/images/virt-manager-windows-detected.png)
 
-However, for other ISO images the detection may not work. You need to uncheck the `Automatically detect from the installation media / source` box and search for `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select the `Generic default (generic)` option. If your image is using a popular operating system under the hood such as Ubuntu or FreeBSD, it is recommended to choose those as the operating system profile instead of the generic option.
+However, for other ISO images the detection may not work. You need to uncheck the `Automatically detect from the installation media / source` box and search for `generic` in the operating system field. On the search results window, check the box for `Include end of life operating systems` and select the `Generic default (generic)` option. If your image is using a popular operating system under the hood such as Ubuntu or FreeBSD you could also choose those as the operating system profile instead of the generic option.
 
 ![virt-manager-generic-os](/images/virt-manager-generic-os.png)
 
