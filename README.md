@@ -56,7 +56,7 @@ Select the metro location that you will be deploying in, then select the server 
 
 ![metro-server-selection](/images/metro-server-selection.png)
 
-Under the Operating Systems section, choose `Custom iPXE`. For the iPXE Script URL field you can provide anything as we won't actually be using it. In my case i'm passing the following URL:
+Under the Operating Systems section, choose `Custom iPXE`. For the iPXE Script URL field you can provide anything as we won't actually be using it. In my case I'm passing the following URL:
 
 ```
 http://boot.netboot.xyz
