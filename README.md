@@ -92,7 +92,7 @@ To access the Rescue Mode environment, you can either use the Out-of-Band consol
 
 We need to install several packages to make the Rescue Mode environment ready for installing an ISO to the server. To do so, run the following commands to run the setup script:
 
-```bash
+```
 curl -s https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup.sh | sh
 ```
 
