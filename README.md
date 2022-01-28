@@ -312,7 +312,6 @@ bcdedit /emssettings EMSPORT:2 EMSBAUDRATE:115200
 For Linux based operating systems, you can typically enable serial console output through the GRUB bootloader options found in `/etc/default/grub`. There you can add the following:
 
 ```
-GRUB_DEFAULT=0
 #GRUB_TIMEOUT_STYLE=hidden
 GRUB_TIMEOUT=3
 GRUB_CMDLINE_LINUX="console=tty0 console=ttyS1,115200n8"
