@@ -309,14 +309,18 @@ bcdedit /emssettings EMSPORT:2 EMSBAUDRATE:115200
 
 ![windows-enable-ems-serial-console](/images/windows-enable-ems-serial-console.png)
 
-For Linux based operating systems, you can typically enable serial console output through the GRUB bootloader kernel cmdline options found in `/etc/default/grub`. There you can add the following:
+For Linux based operating systems, you can typically enable serial console output through the GRUB bootloader options found in `/etc/default/grub`. There you can add the following:
 
 ```
-export GRUB_CMDLINE_LINUX='console=tty0 console=ttyS1,115200n8'
-export GRUB_SERIAL_COMMAND='serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1'
+GRUB_DEFAULT=0
+#GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=3
+GRUB_CMDLINE_LINUX="console=tty0 console=ttyS1,115200n8"
+GRUB_TERMINAL="serial console"
+GRUB_SERIAL_COMMAND="serial --unit=1 --speed=115200 --word=8 --parity=no --stop=1"
 ```
 
-Once you've edited the grub config file, you can apply the change with `update-grub`.
+Once you've edited the GRUB config file, you can apply the change with `update-grub`.
 
 For BSD based operating systems you should be able to add serial console support by editing the `/boot/loader.conf` bootloader configuration file. Add the following to the config file:
 
