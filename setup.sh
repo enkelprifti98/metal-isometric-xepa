@@ -75,3 +75,13 @@ curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bas
 PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
 
 nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
+
+printf "\n\n"
+echo "The desktop environment is available at:"
+printf "\n"
+echo "http://$PUBLIC_IP/"
+printf "\n"
+echo "The file transfer portal is available at:"
+printf "\n"
+echo "http://$PUBLIC_IP:8080/"
+printf "\n\n"
