@@ -2,7 +2,7 @@
 
 # Install XFCE GUI, VNC server, and other necessary packages
 
-apk add --no-cache ca-certificates curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver
+apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver
 
 # Set VNC password: ("alpine" but you can set it to whatever)
 
@@ -63,4 +63,15 @@ cp /root/noVNC/vnc.html /root/noVNC/index.html
 
 sed -i "s/UI.initSetting('resize', 'off');/UI.initSetting('resize', 'scale');/" /root/noVNC/app/ui.js
 
-/root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80
+nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null 2>&1 &
+
+# Install File Browser (https://filebrowser.org/)
+# Default login is:
+# Username: admin
+# Password: admin
+
+curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+
+PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
+
+nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
