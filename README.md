@@ -1,6 +1,6 @@
 # metal-isometric-xepa-old
 
-## NOTE: This method no longer works.
+## NOTE: This project no longer works.
 
 ISO installation environment for Equinix Metal
 
