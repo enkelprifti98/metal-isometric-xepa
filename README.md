@@ -1,6 +1,6 @@
 # metal-isometric-xepa-old
 
-## NOTE: This project no longer works.
+## NOTE: This guide is outdated. Use [this](https://github.com/enkelprifti98/metal-isometric-xepa) instead.
 
 ISO installation environment for Equinix Metal
 
