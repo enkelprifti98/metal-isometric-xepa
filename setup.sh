@@ -17,7 +17,7 @@ nohup /usr/bin/Xvfb :99 -screen 0 $RESOLUTION -ac +extension GLX +render -norese
 
 nohup startxfce4 > /dev/null 2>&1 &
 
-nohup x11vnc -xkb -noxrecord -noxfixes -noxdamage -display :99 -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900 > /dev/null 2>&1 &
+nohup x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900 > /dev/null 2>&1 &
 
 # This network config file with a loopback interface is needed for libvirtd and noVNC (loopback) services to start successfully
 
@@ -77,11 +77,13 @@ PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".netw
 nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
 
 printf "\n\n"
-echo "The desktop environment is available at:"
+echo "The ISO installation environment is available at:"
 printf "\n"
 echo "http://$PUBLIC_IP/"
 printf "\n"
-echo "The file transfer portal is available at:"
+echo "The File Transfer portal is available at:"
 printf "\n"
 echo "http://$PUBLIC_IP:8080/"
+printf "\n"
+echo "The instance is running in $([ -d /sys/firmware/efi ] && echo UEFI || echo BIOS) boot mode."
 printf "\n\n"
