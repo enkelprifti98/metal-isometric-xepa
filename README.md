@@ -114,7 +114,7 @@ The simplest way to access the environment is by pointing your web browser to th
 
 You can also use the VNC client of your choice and point it to the public IPv4 address of the Equinix Metal instance.
 
-In both cases, you will be prompted to connect and enter a password which will be `alpine`.
+In both cases, you will be prompted to connect and enter a password which will be `admin`.
 
 Once you have logged in, you will see the desktop UI. You may get a prompt about the Power Manager Plugin but you can just close the window by clicking the `X` button on the top right corner of the prompt.
 
