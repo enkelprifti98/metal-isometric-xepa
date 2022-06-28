@@ -45,6 +45,10 @@ modprobe vfio_pci
 modprobe vfio_iommu_type1
 chown qemu /dev/vfio/vfio
 
+# Install software TPM package for emulating TPM modules
+
+apk add swtpm --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+
 # Start libvirtd service
 
 rc-service libvirtd start
