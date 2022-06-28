@@ -34,9 +34,13 @@ Profit???
 - [Switch the instance to Rescue Mode](#switch-the-instance-to-rescue-mode)
 - [Run the ISO installation environment setup script](#run-the-iso-installation-environment-setup-script)
 - [Access the ISO installation environment](#access-the-iso-installation-environment)
-- [Download the ISO](#download-the-iso)
+- [Get the ISO](#get-the-iso)
+  - [Download the ISO](#download-the-iso)
+  - [Upload the ISO](#upload-the-iso)
 - [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
+- [Set Virtual Machine boot firmware](#set-virtual-machine-boot-firmware)
 - [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
+- [Add TPM module to the Virtual Machine](#add-tpm-module-to-the-virtual-machine)
 - [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
 - [Install the Operating System](#install-the-operating-system)
 - [Post installation configuration](#post-installation-configuration)
@@ -98,7 +102,7 @@ We need to install several packages to make the Rescue Mode environment ready fo
 curl -s https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup.sh | sh
 ```
 
-The script should only take less than a minute to complete depending on the speed of the system and package downloads. If it completed successfully, you should see the following webserver output:
+The script should only take less than a minute to complete depending on the speed of the system and package downloads. If it completed successfully, you should see the following output with the environment endpoints along with the boot mode the instance is running in, BIOS or UEFI.
 
 ![script-completed](/images/script-completed.png)
 
@@ -116,9 +120,13 @@ Once you have logged in, you will see the desktop UI. You may get a prompt about
 
 ![desktop](/images/desktop.png)
 
-### Download the ISO
+### Get the ISO
 
-We need to download the ISO first which will be Windows 10 for this guide. To do so, you can launch the Firefox web browser by clicking the browser icon on the dock at the bottom of the screen.
+We need to get the ISO file first which will be Windows 10 for this guide. You have the option to either download the ISO from the web or you can upload your own files from your local machine.
+
+#### Download the ISO
+
+To download the ISO image, you can launch the Firefox web browser by clicking the browser icon on the dock at the bottom of the screen. It may take several seconds for the browser to open for the first launch.
 
 ![launch-web-browser](/images/launch-web-browser.png)
 
@@ -129,6 +137,20 @@ You should see the Firefox browser window open. At this point you can proceed wi
 If you want to monitor the download you can click the downward facing arrow on the top right corner of the firefox window. To see where the ISO file was downloaded click the folder icon on the right side of the download. Downloads should be under the `/root/Downloads` folder by default.
 
 ![iso-download](/images/iso-download.png)
+
+#### Upload the ISO
+
+To upload the ISO image from your local machine, you can open another tab on your web browser and navigate to the File Transfer portal endpoint found at the output of the setup script. The File Transfer portal should look like the following image and you can log in with these credentials:
+
+Username: `admin`
+
+Password: `admin`
+
+![file-transfer-portal-login-page](/images/file-transfer-portal-login-page.png)
+
+Once you have logged in to the file transfer portal, you will have access to the entire root user directory. You can navigate to the folder of your choice where you want to upload the ISO such as the `Downloads` folder. To upload the ISO, click the up arrow icon on the top right corner of the portal, select the file option and choose your ISO in the local file browser prompt.
+
+![file-transfer-portal-upload-file](/images/file-transfer-portal-upload-file.png)
 
 ### Create the ISO installation Virtual Machine
 
@@ -190,7 +212,7 @@ Inside the terminal window, type `lsblk -p` and press `Enter`. It will show the 
 
 ![list-storage](/images/list-storage.png)
 
-**Depending on the server type you may see NVMe storage drives as well but you cannot use them as the target for the bootable operating system that we will be installing since Equinix Metal servers boot in Legacy BIOS and to use NVMe drives as bootable targets requires UEFI.**
+**Depending on the server type you may see NVMe storage drives as well. You can only use them as the target for the bootable operating system if your instance is running in UEFI boot mode. NVMe drives cannot be used as bootable drives in BIOS boot mode.**
 
 I recommend using the smallest available drive which in my case are `/dev/sdc` and `/dev/sdd`. For this guide I will be using `/dev/sdc`.
 
@@ -203,6 +225,12 @@ On the last page, select the `Customize configuration before install` option and
 ![virt-manager-customize-config-before-install](/images/virt-manager-customize-config-before-install.png)
 
 A new overview window will appear where you can see the different hardware components of the virtual machine.
+
+### Set Virtual Machine boot firmware
+
+The boot firmware of the virtual machine should match with your instance. Your instance boot mode is provided at the output of the setup script. On the VM overview page, under the firmware option, select BIOS or UEFI depending on your instance.
+
+![vm-boot-firmware](/images/vm-boot-firmware.png)
 
 ### Add serial consoles to the Virtual Machine
 
@@ -222,11 +250,21 @@ You should see 2 serial devices on the VM overview sidebar once you have added t
 
 ![virt-manager-add-serial-console-devices](/images/virt-manager-add-serial-console-devices.png)
 
+### Add TPM module to the Virtual Machine
+
+Some operating systems such as Microsoft's Windows 11 may require a TPM module to run. You can add an emulated TPM module to the virtual machine by clicking the `+ Add Hardware` button on the bottom left corner of the window.
+
+![virt-manager-add-hardware](/images/virt-manager-add-hardware.png)
+
+On the left sidebar select the `TPM` category. On the right side select the model as CRB, backend as Emulated device and Version as 2.0, then click the `Finish` button.
+
+![tpm-hardware](/images/tpm-hardware.png)
+
 ### Attach a PCI device to the Virtual Machine
 
-**Note: This step is optional and may not be possible on certain / legacy server types that do not support IOMMU / VFIO PCI Passthrough properly such as the [c3.small.x86](https://github.com/dlotterman/metal_code_snippets/blob/main/metal_configurations/c3_small_x86/c3_small_x86.md). If the host does not support IOMMU or has not been configured properly, virt-manager will throw errors when starting the VM with PCI devices attached. Check with the Equinix Metal support team to verify that the server BIOS settings for AMD-Vi / Intel VT-d / IOMMU have been enabled.**
+**Note: This step may not be possible on legacy server types that do not support IOMMU / VFIO PCI Passthrough properly such as the [c3.small.x86](https://github.com/dlotterman/metal_code_snippets/blob/main/metal_configurations/c3_small_x86/c3_small_x86.md). If the host does not support IOMMU or has not been configured properly, virt-manager will throw errors when starting the VM with PCI devices attached. Check with the Equinix Metal support team to verify that the server BIOS / UEFI settings for AMD-Vi / Intel VT-d / IOMMU have been enabled.**
 
-The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
+The next step is to pass the physical networking PCIe card to the Virtual Machine which is done through IOMMU / VFIO PCI Passthrough. This is not required to proceed with the OS installation but it is helpful in cases where the original ISO image may not include the drivers needed for the network card so passing the physical device to the VM allows us to install the drivers through the internet provided to the virtual machine.
 
 To do this, click the `+ Add Hardware` button on the bottom left corner of the window and a new one will appear.
 
