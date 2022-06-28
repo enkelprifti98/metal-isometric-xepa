@@ -1,7 +1,5 @@
 # metal-isometric-xepa-old
 
-## NOTE: This guide is outdated. Use [this](https://github.com/enkelprifti98/metal-isometric-xepa) instead.
-
 ISO installation environment for Equinix Metal
 
 ![windows-isometric-meme](/images/windows-isometric-meme.png)
