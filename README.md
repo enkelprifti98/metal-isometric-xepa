@@ -154,7 +154,7 @@ Once you have logged in to the file transfer portal, you will have access to the
 
 ### Create the ISO installation Virtual Machine
 
-Once you have downloaded your ISO, you need to create a Virtual Machine so that you can install the Operating System to the local server storage.
+Once you have the ISO ready, you need to create a Virtual Machine so that you can install the Operating System to the local server storage.
 
 Launch the Virtual Machine Manager by clicking the search icon on the dock at the bottom of the screen, then type `virtual machine manager` in the search field which should show the Virtual Machine Manager application as a search result. Double click on the application to start it.
 
