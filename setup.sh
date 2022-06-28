@@ -4,9 +4,9 @@
 
 apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver
 
-# Set VNC password: ("alpine" but you can set it to whatever)
+# Set VNC password: ("admin" but you can set it to whatever)
 
-mkdir -p /root/.vnc && x11vnc -storepasswd alpine /root/.vnc/passwd
+mkdir -p /root/.vnc && x11vnc -storepasswd admin /root/.vnc/passwd
 
 # Start GUI and VNC server services
 
