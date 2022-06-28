@@ -108,7 +108,7 @@ The script should only take less than a minute to complete depending on the spee
 
 ### Access the ISO installation environment
 
-The simplest way to access the server is by pointing your local web browser to the public IPv4 address of the Equinix Metal instance. The web browser should show this page:
+The simplest way to access the environment is by pointing your web browser to the public IPv4 address of the Equinix Metal instance which is found on the output of the setup script. The web browser should show this page:
 
 ![novnc](/images/novnc.png)
 
