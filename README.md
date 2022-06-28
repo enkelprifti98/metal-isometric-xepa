@@ -8,6 +8,8 @@ ISO installation environment for Equinix Metal
 
 This project makes it possible to install any ISO of your choice on Equinix Metal instances. Windows 10? TrueNAS? NSX Edge? All the ISOs!!!
 
+While you will be able to install any ISO, it is not guaranteed to work due to several factors such as kernel or driver support for the hardware.
+
 ## How does it work?
 
 TLDR: Custom iPXE + Rescue mode / Alpine Linux + KVM hypervisor + IOMMU / VFIO PCI Passthrough + GUI
