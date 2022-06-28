@@ -26,7 +26,8 @@ auto lo
 iface lo inet loopback
 EOF
 
-# Unmount cgroup v1 since Alpine Linux uses cgroup v2. Without unmounting cgroup v1, qemu will throw an error when starting a VM.
+# Fallback to cgroup v1 by unmounting cgroup v2 since the Rescue OS Alpine Linux build has v2 enabled by default.
+# Without unmounting cgroup v2, qemu will throw an error when starting a VM.
 
 umount /sys/fs/cgroup
 
