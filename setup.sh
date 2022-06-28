@@ -26,6 +26,10 @@ auto lo
 iface lo inet loopback
 EOF
 
+# Unmount cgroup v1 since Alpine Linux uses cgroup v2. Without unmounting cgroup v1, qemu will throw an error when starting a VM.
+
+umount /sys/fs/cgroup
+
 # Install KVM hypervisor
 
 apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager
