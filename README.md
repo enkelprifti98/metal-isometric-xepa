@@ -1,4 +1,4 @@
-# metal-isometric-xepa-old
+# metal-isometric-xepa
 
 ISO installation environment for Equinix Metal
 
