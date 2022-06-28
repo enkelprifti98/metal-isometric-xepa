@@ -10,7 +10,7 @@ This project makes it possible to install any ISO of your choice on Equinix Meta
 
 ## How does it work?
 
-TLDR: Custom iPXE + Rescue mode / Alpine Linux + KVM hypervisor + IOMMU / VFIO PCI Passthrough + GUI + Web Browser
+TLDR: Custom iPXE + Rescue mode / Alpine Linux + KVM hypervisor + IOMMU / VFIO PCI Passthrough + GUI
 
 Equinix Metal provides the option of deploying instances with the Custom iPXE Operating System which is effectively a bare metal node with empty local storage drives.
 
