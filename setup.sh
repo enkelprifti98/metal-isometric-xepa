@@ -85,6 +85,8 @@ PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".netw
 
 nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
 
+mkdir /root/Downloads
+
 printf "\n\n"
 echo "The ISO installation environment is available at:"
 printf "\n"
