@@ -40,7 +40,7 @@ Profit???
 - [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
 - [Set Virtual Machine boot firmware](#set-virtual-machine-boot-firmware)
 - [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
-- [Add TPM module to the Virtual Machine](#add-tpm-module-to-the-virtual-machine)
+- [Add a TPM to the Virtual Machine](#add-a-tpm-to-the-virtual-machine)
 - [Attach a PCI device to the Virtual Machine](#attach-a-pci-device-to-the-virtual-machine)
 - [Install the Operating System](#install-the-operating-system)
 - [Post installation configuration](#post-installation-configuration)
@@ -250,9 +250,9 @@ You should see 2 serial devices on the VM overview sidebar once you have added t
 
 ![virt-manager-add-serial-console-devices](/images/virt-manager-add-serial-console-devices.png)
 
-### Add TPM module to the Virtual Machine
+### Add a TPM to the Virtual Machine
 
-Some operating systems such as Microsoft's Windows 11 may require a TPM module to run. You can add an emulated TPM module to the virtual machine by clicking the `+ Add Hardware` button on the bottom left corner of the window.
+Some operating systems such as Microsoft's Windows 11 may require a Trusted Platform Module (TPM) chip to run. You can add an emulated TPM device to the virtual machine by clicking the `+ Add Hardware` button on the bottom left corner of the window.
 
 ![virt-manager-add-hardware](/images/virt-manager-add-hardware.png)
 
