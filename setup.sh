@@ -48,7 +48,7 @@ chown qemu /dev/vfio/vfio
 
 # Install software TPM package for emulating TPM modules
 
-apk add swtpm --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+apk add swtpm libtpms --update --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
 # Start libvirtd service
 
