@@ -78,6 +78,8 @@ apk add firefox-esr \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
+# Set Firefox as the default Web Browser since recent installations don't automatically set it as the default
+
 cat <<-EOF >> ~/.config/xfce4/helpers.rc
 WebBrowser=custom-WebBrowser
 EOF
