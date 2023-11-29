@@ -84,6 +84,8 @@ cat <<-EOF >> ~/.config/xfce4/helpers.rc
 WebBrowser=custom-WebBrowser
 EOF
 
+mkdir -p ~/.local/share/xfce4/helpers
+
 cat <<-EOF >> ~/.local/share/xfce4/helpers/custom-WebBrowser.desktop
 [Desktop Entry]
 NoDisplay=true
