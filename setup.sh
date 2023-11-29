@@ -2,7 +2,11 @@
 
 # Install XFCE GUI, VNC server, and other necessary packages
 
-apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver
+apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver \
+--update \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
 # Set VNC password: ("admin" but you can set it to whatever)
 
@@ -33,7 +37,12 @@ umount /sys/fs/cgroup
 
 # Install KVM hypervisor
 
-apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager
+apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
+--update \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+
 rc-update add libvirtd
 modprobe tun
 modprobe br_netfilter
@@ -57,7 +66,11 @@ rc-service libvirtd start
 
 # Install web-browser (Firefox works, Chromium seems to throw an I/O error and doesn't launch)
 
-apk add firefox-esr
+apk add firefox-esr \
+--update \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
 # Install NoVNC (VNC client over http)
 
