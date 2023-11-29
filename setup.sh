@@ -8,6 +8,12 @@ apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 x
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
+
+#Xfce usually stores its configuration files in ~/.config/xfce4 (as well as ~/.local/share/xfce4 and ~/.config/Thunar).
+#Keyboard shortcuts are stored in ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml.
+#There's a global default set of configuration files in /etc/xdg/xfce4, /etc/xdg/Thunar/, /etc/xdg/menus, etc. (as well as /etc/xdg/xdg-xubuntu if you're using Xubuntu).
+
+
 # Set VNC password: ("admin" but you can set it to whatever)
 
 mkdir -p /root/.vnc && x11vnc -storepasswd admin /root/.vnc/passwd
@@ -71,6 +77,23 @@ apk add firefox-esr \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+
+cat <<-EOF >> ~/.config/xfce4/helpers.rc
+WebBrowser=custom-WebBrowser
+EOF
+
+cat <<-EOF >> ~/.local/share/xfce4/helpers/custom-WebBrowser.desktop
+[Desktop Entry]
+NoDisplay=true
+Version=1.0
+Encoding=UTF-8
+Type=X-XFCE-Helper
+X-XFCE-Category=WebBrowser
+X-XFCE-CommandsWithParameter=firefox-esr "%s"
+Icon=firefox-esr
+Name=firefox-esr
+X-XFCE-Commands=firefox-esr
+EOF
 
 # Install NoVNC (VNC client over http)
 
