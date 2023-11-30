@@ -80,6 +80,8 @@ apk add firefox-esr \
 
 # Set Firefox as the default Web Browser since recent installations don't automatically set it as the default
 
+mkdir -p ~/.config/xfce4
+
 cat <<-EOF > ~/.config/xfce4/helpers.rc
 WebBrowser=custom-WebBrowser
 EOF
