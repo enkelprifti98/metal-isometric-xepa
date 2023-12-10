@@ -91,6 +91,8 @@ apk add firefox-esr \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
 # Set Firefox as the default Web Browser since recent installations don't automatically set it as the default
+# Alternative with xdg-settings command:
+# xdg-settings set default-web-browser firefox.desktop
 
 mkdir -p ~/.config/xfce4
 
@@ -141,6 +143,8 @@ PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".netw
 nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
 
 mkdir /root/Downloads
+
+clear
 
 printf "\n\n"
 echo "The ISO installation environment is available at:"
