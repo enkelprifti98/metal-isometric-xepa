@@ -49,6 +49,18 @@ apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
 
+# Check Alpine Linux version with cat /etc/*release*  and  cat /etc/issue
+# Check QEMU version with /usr/bin/qemu-system-x86_64 --version
+# Check libvirt version with virsh version --daemon  or libvirtd --version
+
+# Replace OVMF UEFI firmware file included in stable QEMU 8.1.3 with newer version to fix the issue of Windows 11 not booting and getting stuck at TianoCore logo
+# You can see all firmware files from the main branch on the link below or select a specific branch / tag release version
+# https://gitlab.com/qemu-project/qemu/-/tree/master/pc-bios
+rm /usr/share/qemu/edk2-x86_64-secure-code.fd
+wget https://gitlab.com/qemu-project/qemu/-/raw/v8.2.0-rc3/pc-bios/edk2-x86_64-secure-code.fd.bz2 -P /usr/share/qemu
+bzip2 -d /usr/share/qemu/edk2-x86_64-secure-code.fd.bz2
+
+
 rc-update add libvirtd
 modprobe tun
 modprobe br_netfilter
