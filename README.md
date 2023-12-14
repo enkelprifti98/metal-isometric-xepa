@@ -413,7 +413,7 @@ While the server is rebooting, you can monitor its progress through the [Out-of-
 
 If there are any kernel panics during the OS boot process, it may potentially mean that your hardware is not supported by the kernel.
 
-If you see any storage drive missing or filesystem mounting related errors during the OS boot process, it could potentially mean that the Operating System does not detect the underlying storage drives / controller. Try installing the OS in a different drive type under a different HBA / storage controller. For troubleshooting, you could also [attach the PCI storage controller](#attach-a-pci-device-to-the-virtual-machine) to the VM inside the ISO installation environment to verify if the OS can detect the drives or not.
+If you see any storage drive missing or filesystem mounting related errors during the OS boot process, it could potentially mean that the Operating System does not support or detect the underlying storage drives / controller. It could also mean that the OS boot configuration is set up by using disk or filesystem UUIDs which will differ when passing the server drives as virtual storage. Try installing the OS in a different drive type under a different HBA / storage controller. You can also [attach the PCI storage controller](#attach-a-pci-device-to-the-virtual-machine) to the VM inside the ISO installation environment to install the OS directly trough the storage controller and verify if the OS can detect the drives or not.
 
 Once the server has rebooted succesfully, you should be able to access it via RDP / SSH through its IP address or the Out-of-Band console.
 
