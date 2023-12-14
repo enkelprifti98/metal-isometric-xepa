@@ -411,6 +411,8 @@ Go to the Equinix Metal console server overview page, click the `Server Actions`
 
 While the server is rebooting, you can monitor its progress through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos).
 
+You will notice the server will be trying to PXE boot over the network initially and loop through each network interface but it should eventually get to the OS boot drive. If it doesn't find the OS boot drive, it means that either the VM firmware did not match with the server (BIOS vs UEFI) or the OS was installed on an NVMe drive in a BIOS server which do not support booting an OS from NVMe drives, only UEFI servers can support NVMe drives as boot targets.
+
 If there are any kernel panics during the OS boot process, it may potentially mean that your hardware is not supported by the kernel.
 
 If you see any storage drive missing or filesystem mounting related errors during the OS boot process, it could potentially mean that the Operating System does not support or detect the underlying storage drives / controller. It could also mean that the OS boot configuration is set up by using disk or filesystem UUIDs which will differ when passing the server drives as virtual storage. Try installing the OS in a different drive type under a different HBA / storage controller. You can also [attach the PCI storage controller](#attach-a-pci-device-to-the-virtual-machine) to the VM inside the ISO installation environment to install the OS directly through the storage controller and verify if the OS can detect the drives or not.
