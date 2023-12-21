@@ -69,7 +69,7 @@ apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
 # You can see all firmware files from the main branch on the link below or select a specific branch / tag release version
 # https://gitlab.com/qemu-project/qemu/-/tree/master/pc-bios
 rm /usr/share/qemu/edk2-x86_64-secure-code.fd
-wget https://gitlab.com/qemu-project/qemu/-/raw/v8.2.0-rc3/pc-bios/edk2-x86_64-secure-code.fd.bz2 -P /usr/share/qemu
+wget https://gitlab.com/qemu-project/qemu/-/raw/v8.2.0/pc-bios/edk2-x86_64-secure-code.fd.bz2 -P /usr/share/qemu
 bzip2 -d /usr/share/qemu/edk2-x86_64-secure-code.fd.bz2
 
 
