@@ -2,7 +2,7 @@
 
 # Install XFCE GUI, VNC server, and other necessary packages
 
-apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver \
+apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver ethtool \
 --update \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
@@ -145,6 +145,80 @@ nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
 mkdir /root/Downloads
 
 clear
+
+# Network Interface PCI information
+
+#IFS=$'\n'
+METADATA=$(curl -s metadata.packet.net/metadata)
+INTERFACES_COUNT=$(echo $METADATA | jq '.network.interfaces | length')
+echo
+echo "Network interfaces:"
+echo
+
+for i in $(seq 1 $INTERFACES_COUNT)
+do
+
+METADATA_MAC=$(echo $METADATA | jq -r .network.interfaces[$i-1].mac)
+METADATA_IF_NAME=$(echo $METADATA | jq -r .network.interfaces[$i-1].name)
+
+for LINE in $(ls -d /sys/class/net/*/ | cut -d '/' -f5)
+do
+
+#LOCAL_MAC=$(cat /sys/class/net/$LINE/address)
+# /sys/class/net/$LINE/address returns the same MAC for any interface part of a bonded interfaces so it's not reliable
+# ethtool permanent address option returns the real MAC of the interface regardless if it's part of a bond
+LOCAL_MAC=$(ethtool -P $LINE | cut -d ' ' -f3)
+
+# some interfaces like bonds will have the same MAC address as the primary interface but they won't have a uevent file so we're ignoring it
+if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/uevent" ]; then
+
+    PCI_ID=$(grep PCI_SLOT_NAME /sys/class/net/$LINE/device/uevent | cut -d "=" -f2)
+
+# only add API Interface name if OS name is different
+
+    if [ "$METADATA_IF_NAME" == "$LINE" ]; then
+        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/"
+    else
+        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/" | sed "s/$/ ($METADATA_IF_NAME)/"
+    fi
+
+    echo
+    break
+fi
+done
+done
+
+
+# Storage drive information and PCI mapping
+
+IFS=$'\n'
+echo
+echo "Local storage drives:"
+echo
+
+#SATA drives
+for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
+do
+
+PCI_ID=$(echo $LINE | cut -d "/" -f4)
+lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
+DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
+lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
+echo
+
+done
+
+#NVMe drives
+for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9, $10, $11}')
+do
+
+PCI_ID=$(echo $LINE | cut -d "/" -f5)
+lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
+DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
+lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
+echo
+
+done
 
 printf "\n\n"
 echo "The ISO installation environment is available at:"
