@@ -1,12 +1,19 @@
 #!/bin/sh
 
+# Remove edge branch repos because newer packages can cause issues
+# You can check package versions from specific branches and repos here:
+# https://pkgs.alpinelinux.org/packages
+# The actual repository links with package files are hosted here:
+# https://dl-cdn.alpinelinux.org/alpine/
+sed -i '/edge/d' /etc/apk/repositories
+
 # Install XFCE GUI, VNC server, and other necessary packages
 
 apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver ethtool \
 --update \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
 
 
 #Xfce usually stores its configuration files in ~/.config/xfce4 (as well as ~/.local/share/xfce4 and ~/.config/Thunar).
@@ -45,13 +52,18 @@ umount /sys/fs/cgroup
 
 apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
 --update \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
 
 # Check Alpine Linux version with cat /etc/*release*  and  cat /etc/issue
 # Check QEMU version with /usr/bin/qemu-system-x86_64 --version
 # Check libvirt version with virsh version --daemon  or libvirtd --version
+
+# NOTE: It looks like QEMU 8.2.0 from the edge branch isn't working with PCI VFIO passthrough.
+# It throws this error when starting a VM:
+# qemu unexpectedly closed the monitor
+# Using QEMU 8.1.3 from the latest-stable branch fixes the issue.
 
 # Replace OVMF UEFI firmware file included in stable QEMU 8.1.3 with newer version to fix the issue of Windows 11 not booting and getting stuck at TianoCore logo
 # You can see all firmware files from the main branch on the link below or select a specific branch / tag release version
@@ -76,7 +88,7 @@ chown qemu /dev/vfio/vfio
 # Install software TPM package for emulating TPM modules
 # (the package location seems to shift between the different Alpine repos/branches sometimes, you can check the latest-stable and edge repos at http://dl-cdn.alpinelinux.org/alpine/ )
 
-apk add swtpm libtpms --update --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+apk add swtpm libtpms --update --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
 
 # Start libvirtd service
 
@@ -86,9 +98,9 @@ rc-service libvirtd start
 
 apk add firefox-esr \
 --update \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/edge/main/
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
+--repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
 
 # Set Firefox as the default Web Browser since recent installations don't automatically set it as the default
 # Alternative with xdg-settings command:
