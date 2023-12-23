@@ -359,7 +359,7 @@ GRUB_TERMINAL="serial console"
 GRUB_SERIAL_COMMAND="serial --unit=1 --speed=115200 --word=8 --parity=no --stop=1"
 ```
 
-Once you've edited the GRUB config file, you can apply the change with `update-grub`.
+Once you've edited the GRUB config file, you may be able to apply the change with one of these GRUB commands depending on your distribution: `update-grub` / `update-grub2` / `grub-mkconfig -o /path/to/configfile` / `grub2-mkconfig -o /path/to/configfile`.
 
 For BSD based operating systems you should be able to add serial console support by editing the `/boot/loader.conf` bootloader configuration file. Add the following to the config file:
 
