@@ -1,5 +1,3 @@
-# NOTE: This project is no longer working. Please use the ubuntu based [alternative](https://github.com/enkelprifti98/metal-isometric-xepa-ubuntu) instead.
-
 # metal-isometric-xepa
 
 ISO installation environment for Equinix Metal
@@ -11,6 +9,8 @@ ISO installation environment for Equinix Metal
 This project makes it possible to install any ISO of your choice on Equinix Metal instances. Windows 10? TrueNAS? NSX Edge? All the ISOs!!!
 
 While you will be able to install any ISO, it is not guaranteed to work due to several factors such as kernel or driver support for the hardware.
+
+NOTE: If you encounter any issues during the installation process try using the ubuntu based [alternative](https://github.com/enkelprifti98/metal-isometric-xepa-ubuntu) instead.
 
 ## How does it work?
 
