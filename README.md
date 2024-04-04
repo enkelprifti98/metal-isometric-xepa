@@ -1,3 +1,5 @@
+# NOTE: This project isn't working. Please use the ubuntu based ![alternative](https://github.com/enkelprifti98/metal-isometric-xepa-ubuntu) instead.
+
 # metal-isometric-xepa
 
 ISO installation environment for Equinix Metal
