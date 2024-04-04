@@ -9,7 +9,7 @@ sed -i '/edge/d' /etc/apk/repositories
 
 # Install XFCE GUI, VNC server, and other necessary packages
 
-apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver ethtool \
+apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver ethtool gtk+3.0-dev \
 --update \
 --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
 --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
