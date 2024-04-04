@@ -1,4 +1,4 @@
-# NOTE: This project isn't working. Please use the ubuntu based [alternative](https://github.com/enkelprifti98/metal-isometric-xepa-ubuntu) instead.
+# NOTE: This project is no longer working. Please use the ubuntu based [alternative](https://github.com/enkelprifti98/metal-isometric-xepa-ubuntu) instead.
 
 # metal-isometric-xepa
 
