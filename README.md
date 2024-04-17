@@ -355,6 +355,7 @@ For Linux based operating systems, you can typically enable serial console outpu
 
 ```
 #GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT_STYLE=menu
 GRUB_TIMEOUT=3
 GRUB_CMDLINE_LINUX="console=tty0 console=ttyS1,115200n8"
 GRUB_TERMINAL="serial console"
