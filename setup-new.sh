@@ -11,10 +11,7 @@ sed -i '/edge/d' /etc/apk/repositories
 # The standard gtk+3.0 required package seems to fail, installing gtk+3.0-dev works so startxfce4 runs successfully.
 
 apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gzip p7zip cpio tar unzip xarchiver ethtool gtk+3.0-dev \
---update \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
+--update
 
 
 #Xfce usually stores its configuration files in ~/.config/xfce4 (as well as ~/.local/share/xfce4 and ~/.config/Thunar).
@@ -52,10 +49,7 @@ umount /sys/fs/cgroup
 # Install KVM hypervisor
 
 apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
---update \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
+--update
 
 # Check Alpine Linux version with cat /etc/*release*  and  cat /etc/issue
 # Check QEMU version with /usr/bin/qemu-system-x86_64 --version
@@ -89,7 +83,7 @@ chown qemu /dev/vfio/vfio
 # Install software TPM package for emulating TPM modules
 # (the package location seems to shift between the different Alpine repos/branches sometimes, you can check the latest-stable and edge repos at http://dl-cdn.alpinelinux.org/alpine/ )
 
-apk add swtpm libtpms --update --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ --repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
+apk add swtpm libtpms --update
 
 # Start libvirtd service
 
@@ -98,10 +92,7 @@ rc-service libvirtd start
 # Install web-browser (Firefox works, Chromium seems to throw an I/O error and doesn't launch)
 
 apk add firefox-esr \
---update \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/testing/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/community/ \
---repository=http://dl-cdn.alpinelinux.org/alpine/latest-stable/main/
+--update
 
 # Set Firefox as the default Web Browser since recent installations don't automatically set it as the default
 # Alternative with xdg-settings command:
