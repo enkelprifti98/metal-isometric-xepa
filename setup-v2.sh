@@ -245,6 +245,10 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
 
 #PCI_EXISTS_IN_LIST="false"
 
+# Only add network interfaces that aren't used for management
+
+# if [ "$MANAGEMENT_METADATA_MAC" != "$LOCAL_MAC" ]; then
+
 #for PCI in $NETWORK_PCI_LIST
 #do
 #    if [ "$PCI_ID" == "$PCI" ]; then
@@ -266,6 +270,7 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
 
 #fi
 
+#fi
 
 
 # only add API Interface name if OS name is different
