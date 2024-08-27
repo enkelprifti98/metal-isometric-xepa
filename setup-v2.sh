@@ -322,17 +322,10 @@ echo
 
 done
 
+
 # virt-install PCI device boot order
 
-NUM=0
-for LINE in $NETWORK_PCI_LIST
-do
-  echo $LINE
-  NUM=$(( NUM + 1 ))
-  echo $NUM
-  IFS=$'\n'
-  echo
-done
+VIRT_INSTALL_PCI_DEVICES=""
 
 NUM=0
 for LINE in $STORAGE_PCI_LIST
@@ -342,7 +335,39 @@ do
   echo $NUM
   IFS=$'\n'
   echo
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
 done
+
+NUM=$(( NUM + 1 ))
+#CDROM boot order ^
+VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--disk device=cdrom,bus=sata,boot.order='$NUM$' '
+
+
+for LINE in $NETWORK_PCI_LIST
+do
+  echo $LINE
+  NUM=$(( NUM + 1 ))
+  echo $NUM
+  IFS=$'\n'
+  echo
+# There's no need to add network devices to the boot order unless you need it for troubleshooting
+#  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$' '
+done
+
+echo "$VIRT_INSTALL_PCI_DEVICES"
+
+virt-install \
+--name xepa \
+--description "XEPA ISO Installer VM" \
+--os-variant=generic \
+--ram=4096 \
+--vcpus=4 \
+--boot uefi \
+--import \
+--nonetworks \
+--noreboot \
+$VIRT_INSTALL_PCI_DEVICES
 
 
 
