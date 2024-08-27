@@ -384,7 +384,23 @@ do
   echo $NUM
   IFS=$'\n'
   echo
-  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$',boot.order='$NUM$' '
+  
+  PCI_DOMAIN=$(echo $LINE | cut -d ":" -f1)
+  PCI_BUS=$(echo $LINE | cut -d ":" -f2)
+  PCI_SLOT=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f1)
+  PCI_FUNCTION=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f2)
+
+  PCI_MULTIFUNCTION_TEST=$(lspci -vvv -D -s $LINE | grep Function)
+
+  if [ "$PCI_MULTIFUNCTION_TEST" == "" ]; then
+      # echo "not multifunction capable"
+      PCI_MULTI_FUNCTION=off
+  else
+      PCI_MULTI_FUNCTION=on
+  fi
+
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$',boot.order='$NUM,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
+  
 done
 
 NUM=$(( NUM + 1 ))
@@ -399,9 +415,25 @@ do
   echo $NUM
   IFS=$'\n'
   echo
+
+  PCI_DOMAIN=$(echo $LINE | cut -d ":" -f1)
+  PCI_BUS=$(echo $LINE | cut -d ":" -f2)
+  PCI_SLOT=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f1)
+  PCI_FUNCTION=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f2)
+
+  PCI_MULTIFUNCTION_TEST=$(lspci -vvv -D -s $LINE | grep Function)
+
+  if [ "$PCI_MULTIFUNCTION_TEST" == "" ]; then
+      # echo "not multifunction capable"
+      PCI_MULTI_FUNCTION=off
+  else
+      PCI_MULTI_FUNCTION=on
+  fi
+  
 # There's no need to add network devices to the boot order unless you need it for troubleshooting
 #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
-  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$' '
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
+  
 done
 
 echo "$VIRT_INSTALL_PCI_DEVICES"
