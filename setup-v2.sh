@@ -328,7 +328,7 @@ done
 
 # virt-install PCI device boot order
 
-VIRT_INSTALL_PCI_DEVICES=""
+VIRT_INSTALL_PCI_DEVICES=''
 
 NUM=0
 for LINE in $STORAGE_PCI_LIST
@@ -338,7 +338,7 @@ do
   echo $NUM
   IFS=$'\n'
   echo
-  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$',boot.order='$NUM$' '
 done
 
 NUM=$(( NUM + 1 ))
@@ -355,22 +355,17 @@ do
   echo
 # There's no need to add network devices to the boot order unless you need it for troubleshooting
 #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
-  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$' '
+  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$' '
 done
 
 echo "$VIRT_INSTALL_PCI_DEVICES"
 
-virt-install \
---name xepa \
---description "XEPA ISO Installer VM" \
---os-variant=generic \
---ram=4096 \
---vcpus=4 \
---boot uefi \
---import \
---nonetworks \
---noreboot \
-$VIRT_INSTALL_PCI_DEVICES
+# Passing a string of parameters as a variable to virt-install doesn't seem to work as it seems like a formatting issue
+# It works by evaluating the content of the string as shell code
+
+VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --ram=4096 --vcpus=4 --boot uefi --import --nonetworks --noreboot '
+
+eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
 
 
