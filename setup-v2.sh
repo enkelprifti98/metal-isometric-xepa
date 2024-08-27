@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Run from Out-of-Band console
+# wget -q -O setup-v2.sh https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup-v2.sh && chmod +x setup-v2.sh && ./setup-v2.sh
+
 env | grep METAL_AUTH_TOKEN > /dev/null
 if [ $? -eq 0 ]; then
   echo "Reading Equinix Metal API key from METAL_AUTH_TOKEN environment variable"
