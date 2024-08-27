@@ -171,6 +171,8 @@ clear
 
 # Network Interface PCI information
 
+NETWORK_PCI_LIST=""
+
 #IFS=$'\n'
 METADATA=$(curl -s metadata.packet.net/metadata)
 INTERFACES_COUNT=$(echo $METADATA | jq '.network.interfaces | length')
@@ -197,6 +199,31 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
 
     PCI_ID=$(grep PCI_SLOT_NAME /sys/class/net/$LINE/device/uevent | cut -d "=" -f2)
 
+PCI_EXISTS_IN_LIST="false"
+
+for PCI in $NETWORK_PCI_LIST
+do
+    if [ "$PCI_ID" == "$PCI" ]; then
+        # To add duplicate PCI IDs just comment out the next line # PCI_EXISTS_IN_LIST="true"
+        PCI_EXISTS_IN_LIST="true"
+    fi
+done
+
+if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
+
+    if [[ -z "$NETWORK_PCI_LIST" ]]; then
+       # $NETWORK_PCI_LIST is empty, do what you want
+       # echo "PCI list is empty"
+       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$PCI_ID
+    else
+       # echo "PCI list is not empty"
+       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$'\n'$PCI_ID
+    fi
+
+fi
+
+
+
 # only add API Interface name if OS name is different
 
     if [ "$METADATA_IF_NAME" == "$LINE" ]; then
@@ -214,6 +241,8 @@ done
 
 # Storage drive information and PCI mapping
 
+STORAGE_PCI_LIST=""
+
 IFS=$'\n'
 echo
 echo "Local storage drives:"
@@ -224,6 +253,31 @@ for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
 do
 
 PCI_ID=$(echo $LINE | cut -d "/" -f4)
+
+PCI_EXISTS_IN_LIST="false"
+
+for PCI in $STORAGE_PCI_LIST
+do
+    if [ "$PCI_ID" == "$PCI" ]; then
+        # To add duplicate PCI IDs just comment out the next line # PCI_EXISTS_IN_LIST="true"
+        PCI_EXISTS_IN_LIST="true"
+    fi
+done
+
+if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
+
+    if [[ -z "$STORAGE_PCI_LIST" ]]; then
+       # $STORAGE_PCI_LIST is empty, do what you want
+       # echo "PCI list is empty"
+       STORAGE_PCI_LIST=$STORAGE_PCI_LIST$PCI_ID
+    else
+       # echo "PCI list is not empty"
+       STORAGE_PCI_LIST=$STORAGE_PCI_LIST$'\n'$PCI_ID
+    fi
+
+fi
+
+
 lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
 DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
 lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
@@ -231,16 +285,63 @@ echo
 
 done
 
+
 #NVMe drives
 for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9, $10, $11}')
 do
 
 PCI_ID=$(echo $LINE | cut -d "/" -f5)
+
+PCI_EXISTS_IN_LIST="false"
+
+for PCI in $STORAGE_PCI_LIST
+do
+    if [ "$PCI_ID" == "$PCI" ]; then
+        # To add duplicate PCI IDs just comment out the next line # PCI_EXISTS_IN_LIST="true"
+        PCI_EXISTS_IN_LIST="true"
+    fi
+done
+
+if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
+
+    if [[ -z "$STORAGE_PCI_LIST" ]]; then
+       # $STORAGE_PCI_LIST is empty, do what you want
+       # echo "PCI list is empty"
+       STORAGE_PCI_LIST=$STORAGE_PCI_LIST$PCI_ID
+    else
+       # echo "PCI list is not empty"
+       STORAGE_PCI_LIST=$STORAGE_PCI_LIST$'\n'$PCI_ID
+    fi
+
+fi
+
 lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
 DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
 lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
 echo
 
+done
+
+# virt-install PCI device boot order
+
+NUM=0
+for LINE in $NETWORK_PCI_LIST
+do
+  echo $LINE
+  NUM=$(( NUM + 1 ))
+  echo $NUM
+  IFS=$'\n'
+  echo
+done
+
+NUM=0
+for LINE in $STORAGE_PCI_LIST
+do
+  echo $LINE
+  NUM=$(( NUM + 1 ))
+  echo $NUM
+  IFS=$'\n'
+  echo
 done
 
 
