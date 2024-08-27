@@ -67,7 +67,7 @@ umount /sys/fs/cgroup
 # Install KVM hypervisor
 # VM xml config files are stored in /etc/libvirt/qemu
 
-apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager \
+apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager virt-install \
 --update
 
 # Check Alpine Linux version with cat /etc/*release*  and  cat /etc/issue
