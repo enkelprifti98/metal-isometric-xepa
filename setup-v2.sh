@@ -3,6 +3,10 @@
 # Run from Out-of-Band console
 # wget -q -O setup-v2.sh https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup-v2.sh && chmod +x setup-v2.sh && ./setup-v2.sh
 
+echo
+echo "XEPA ISO INSTALLATION ENVIRONMENT"
+echo
+
 env | grep METAL_AUTH_TOKEN > /dev/null
 if [ $? -eq 0 ]; then
   echo "Reading Equinix Metal API key from METAL_AUTH_TOKEN environment variable"
@@ -179,6 +183,21 @@ NETWORK_PCI_LIST=""
 #IFS=$'\n'
 METADATA=$(curl -s metadata.packet.net/metadata)
 INTERFACES_COUNT=$(echo $METADATA | jq '.network.interfaces | length')
+
+if [ "$INTERFACES_COUNT" -gt  "2" ];then
+
+   # get network port mac address for eth2 on 4 port servers
+   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth2") | .mac')
+   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
+
+else
+
+   # get network port mac address for eth1 on 2 port servers
+   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth1") | .mac')
+   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
+
+fi
+
 echo
 echo "Network interfaces:"
 echo
@@ -200,30 +219,52 @@ LOCAL_MAC=$(ethtool -P $LINE | cut -d ' ' -f3)
 # some interfaces like bonds will have the same MAC address as the primary interface but they won't have a uevent file so we're ignoring it
 if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/uevent" ]; then
 
+    # Get proper management interface by checking the metadata with the OS
+    if [ "$MANAGEMENT_METADATA_MAC" == "$LOCAL_MAC" ]; then
+        MANAGEMENT_IF_NAME=$LINE
+    fi
+
     PCI_ID=$(grep PCI_SLOT_NAME /sys/class/net/$LINE/device/uevent | cut -d "=" -f2)
 
-PCI_EXISTS_IN_LIST="false"
 
-for PCI in $NETWORK_PCI_LIST
-do
-    if [ "$PCI_ID" == "$PCI" ]; then
-        # To add duplicate PCI IDs just comment out the next line # PCI_EXISTS_IN_LIST="true"
-        PCI_EXISTS_IN_LIST="true"
+    # Add only the eth0 interface / NIC to the XEPA ISO VM
+
+    if [ "$ETH0_METADATA_MAC" == "$LOCAL_MAC" ]; then
+        if [[ -z "$NETWORK_PCI_LIST" ]]; then
+           # $NETWORK_PCI_LIST is empty, do what you want
+           # echo "PCI list is empty"
+           NETWORK_PCI_LIST=$NETWORK_PCI_LIST$PCI_ID
+        else
+           # echo "PCI list is not empty"
+           NETWORK_PCI_LIST=$NETWORK_PCI_LIST$'\n'$PCI_ID
+        fi
     fi
-done
 
-if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
 
-    if [[ -z "$NETWORK_PCI_LIST" ]]; then
+# This is code to add all network interfaces to the XEPA ISO VM
+
+#PCI_EXISTS_IN_LIST="false"
+
+#for PCI in $NETWORK_PCI_LIST
+#do
+#    if [ "$PCI_ID" == "$PCI" ]; then
+        # To add duplicate PCI IDs just comment out the next line # PCI_EXISTS_IN_LIST="true"
+#        PCI_EXISTS_IN_LIST="true"
+#    fi
+#done
+
+#if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
+
+#    if [[ -z "$NETWORK_PCI_LIST" ]]; then
        # $NETWORK_PCI_LIST is empty, do what you want
        # echo "PCI list is empty"
-       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$PCI_ID
-    else
+#       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$PCI_ID
+#    else
        # echo "PCI list is not empty"
-       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$'\n'$PCI_ID
-    fi
+#       NETWORK_PCI_LIST=$NETWORK_PCI_LIST$'\n'$PCI_ID
+#    fi
 
-fi
+#fi
 
 
 
@@ -449,13 +490,11 @@ if [ "$INTERFACES_COUNT" -gt  "3" ];then
 
    # get network port id for eth2 on 4 port servers
    NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth2") | .id')
-   IF_NAME="eth2"
 
 else
 
    # get network port id for eth1 on 2 port servers
    NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth1") | .id')
-   IF_NAME="eth1"
 
 fi
 
@@ -491,13 +530,13 @@ fi
 
 cat >> /etc/network/interfaces <<EOF
 
-auto $IF_NAME
-iface $IF_NAME inet static
+auto $MANAGEMENT_IF_NAME
+iface $MANAGEMENT_IF_NAME inet static
     address $SERVER_IP
     netmask $NETMASK
 EOF
 
-ifup $IF_NAME
+ifup $MANAGEMENT_IF_NAME
 
 ip route del default
 ip route add default via $GATEWAY
