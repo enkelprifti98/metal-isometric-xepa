@@ -441,7 +441,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # Passing a string of parameters as a variable to virt-install doesn't seem to work as it seems like a formatting issue
 # It works by evaluating the content of the string as shell code
 
-VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=4 --ram=4096 --import --nonetworks --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
+VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --nonetworks --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
 
 # Useful virt-install options
 # --os-variant detect=off \
