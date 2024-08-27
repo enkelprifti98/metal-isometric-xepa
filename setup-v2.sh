@@ -411,6 +411,11 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 
 VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=4 --ram=4096 --import --nonetworks --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
 
+# Useful virt-install options
+# --os-variant detect=off \
+# --os-variant detect=on \
+# --virt-type kvm \
+
 if [ -d /sys/firmware/efi ]; then
     VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi '
 fi
