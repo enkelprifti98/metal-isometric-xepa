@@ -409,7 +409,20 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # Passing a string of parameters as a variable to virt-install doesn't seem to work as it seems like a formatting issue
 # It works by evaluating the content of the string as shell code
 
-VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --ram=4096 --vcpus=4 --boot uefi --import --nonetworks --noreboot '
+VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=4 --ram=4096 --import --nonetworks --noreboot '
+
+if [ -d /sys/firmware/efi ]; then
+    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi '
+fi
+
+SECURE_BOOT_STATE=$(mokutil --sb-state | grep "SecureBoot")
+# SecureBoot enabled  or  SecureBoot disabled
+
+if [ "$SECURE_BOOT_STATE" == "SecureBoot enabled" ]; then
+#    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader=/usr/share/qemu/edk2-x86_64-secure-code.fd,loader.readonly=yes,loader.type=pflash '
+#    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi,loader.secure=no '
+    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=yes '
+fi
 
 eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
