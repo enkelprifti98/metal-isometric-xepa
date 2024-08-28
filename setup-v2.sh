@@ -72,7 +72,14 @@ EOF
 umount /sys/fs/cgroup
 
 # Install KVM hypervisor
-# VM xml config files are stored in /etc/libvirt/qemu
+# VM xml config files are stored in /etc/libvirt/qemu  e.g. xepa.xml
+# All configuration files are located in directory /etc/libvirt
+# Each VM will have its own configuration file in directory /etc/libvirt/qemu, e.g. debian12.xml
+# Each VM configuration file contains the path to its image file.
+# Storage pools will be defined in directory /etc/libvirt/storage
+# A VM image file will by default be created in directory /var/lib/libvirt/images, i.e. the storage pool normally defined by file /etc/libvirt/storage/default.xml
+# Directory /var/lib/libvirt contains other subdirectories.
+# You can define other storage pool locations when creating a VM in virt-manager.
 
 apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager virt-install \
 --update
