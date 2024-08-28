@@ -450,6 +450,8 @@ VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer 
 # --virt-type kvm \
 # --machine q35  using q35 chipset instead of i440fx is required for PCIe support otherwise passing specific PCI IDs to the guest instead of getting random IDs like address.domain=0x$PCI_DOMAIN will not work
 
+# -d check in shell returns true if directory exists
+
 if [ -d /sys/firmware/efi ]; then
     VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi '
 fi
