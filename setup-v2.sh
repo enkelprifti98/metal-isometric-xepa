@@ -440,6 +440,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 
 # Passing a string of parameters as a variable to virt-install doesn't seem to work as it seems like a formatting issue
 # It works by evaluating the content of the string as shell code
+# eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
 VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --nonetworks --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
 
@@ -464,9 +465,31 @@ elseif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ];
     VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=no '
 fi
 
-echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
-eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
+
+# ls -l /sys/class/iommu/*/devices
+
+# shell string checks
+# -n  string is not null.
+# -z  string is null, that is, has zero length
+
+if [ -n "$(ls /sys/class/iommu)" ] && [ -n "$(find /sys | grep dmar)" ];
+then
+#  echo "contains files, iommu enabled in bios/uefi"
+  IOMMU_STATE=enabled
+else
+#  echo "empty, iommu disabled in bios/uefi"
+  IOMMU_STATE=disabled
+fi
+
+if [ "$IOMMU_STATE" == "enabled" ]; then
+    echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
+    eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
+elseif [ "$IOMMU_STATE" == "disabled" ];
+    # Don't add PCI devices as it's not supported when IOMMU is disabled
+    echo "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
+    eval "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
+fi
 
 
 
@@ -617,3 +640,7 @@ echo "http://$SERVER_IP:8080/"
 printf "\n"
 echo "The instance is running in $([ -d /sys/firmware/efi ] && echo UEFI || echo BIOS) boot mode."
 printf "\n\n"
+
+if [ "$IOMMU_STATE" == "disabled" ]; then
+    echo "WARNING: IOMMU is disabled in $([ -d /sys/firmware/efi ] && echo UEFI || echo BIOS) so PCI Passthrough will not work!"
+fi
