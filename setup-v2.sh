@@ -80,6 +80,7 @@ umount /sys/fs/cgroup
 # A VM image file will by default be created in directory /var/lib/libvirt/images, i.e. the storage pool normally defined by file /etc/libvirt/storage/default.xml
 # Directory /var/lib/libvirt contains other subdirectories.
 # You can define other storage pool locations when creating a VM in virt-manager.
+# QEMU logs for each VM / Domain are stored in /var/log/libvirt/qemu  e.g. /var/log/libvirt/qemu/xepa.log which shows the /usr/bin/qemu-system-x86_64 command parameters.
 
 apk add libvirt-daemon qemu-img qemu-system-x86_64 qemu-modules virt-manager virt-install \
 --update
