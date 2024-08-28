@@ -476,16 +476,18 @@ fi
 if [ -n "$(ls /sys/class/iommu)" ] && [ -n "$(find /sys | grep dmar)" ];
 then
 #  echo "contains files, iommu enabled in bios/uefi"
-  IOMMU_STATE=enabled
+  IOMMU_STATE="enabled"
 else
 #  echo "empty, iommu disabled in bios/uefi"
-  IOMMU_STATE=disabled
+  IOMMU_STATE="disabled"
 fi
 
 if [ "$IOMMU_STATE" == "enabled" ]; then
     echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
     eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
-elseif [ "$IOMMU_STATE" == "disabled" ];
+fi
+
+if [ "$IOMMU_STATE" == "disabled" ]; then
     # Don't add PCI devices as it's not supported when IOMMU is disabled
     echo "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
     eval "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
@@ -643,4 +645,7 @@ printf "\n\n"
 
 if [ "$IOMMU_STATE" == "disabled" ]; then
     echo "WARNING: IOMMU is disabled in $([ -d /sys/firmware/efi ] && echo UEFI || echo BIOS) so PCI Passthrough will not work!"
+    printf "\n\n"
 fi
+
+
