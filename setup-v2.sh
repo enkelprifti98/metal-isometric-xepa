@@ -447,10 +447,11 @@ do
   # 00: 72 11 00 00 06 01 10 00 01 00 00 ff 08 00 |80| 00
   #
   # If byte 14 (offset 0E) is set (value = 0x80 or something else, setpci returns just 80), the device is multi-function -- else it is not.
-  # You can convert the hex value 80 or whatever value you get to binary which should be 10000000.
+  # You can convert the hex value 80 or whatever value you get to binary which should be 10000000
   #                                                                 Bits 01234567
   # You then need to reverse the order of the binary value so it becomes 00000001
   # So in this case Bit 7 is set to 1 so the PCI devices is multifunction capable.
+  # The reason for reversing the binary value might have to do with endianness or because the PCI config space is in reverse. Most general purpose computers use little-endian.
 
 #  You can use this command to get offset 0E in binary form. Replace 0000:8a:00.0 with your PCI device address.
 #  echo "obase=2; ibase=16; $(lspci -x -s 0000:8a:00.0 | grep "00: \|\." | cut -d ' ' -f16)" | bc | rev
