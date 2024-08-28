@@ -433,6 +433,43 @@ do
   else
       PCI_MULTI_FUNCTION=off
   fi
+
+
+  # Bit 7 of the Header Type register (Offset 0E (hexadecimal) which means byte 14 (decimal) starting from byte 0) in the PCI configuration space is used to determine if the device has multiple functions.
+  # There are 8 bits in a byte and it starts from bit 0 to 7 so bit 7 is the last one.
+  # If bit 7 of the register is set (binary value 1), the device has multiple functions, otherwise (binary value 0) it is a single function device.
+  # Check offset 0E in byte form for a specific PCI device BDF address:
+  # setpci -s 0000:8a:00.0 0E.B
+  # Alternatively lspci will display the standard hex-dump of the standard part of the config space, out of which we need only the first line (256 bytes) i.e PCI Device Structure.
+  # lspci -x -s 0000:8a:00.0
+  # 00: is the offset or starting byte of the line. The next line would be 10: which means byte 16 and so on.
+  #     00 <-- byte 0                  byte 14 --> 0E
+  # 00: 72 11 00 00 06 01 10 00 01 00 00 ff 08 00 |80| 00
+  #
+  # If byte 14 (offset 0E) is set (value = 0x80, setpci returns just 80), the device is multi-function -- else it is not.
+  # You can convert the hex value 80 or whatever value you get to binary which should be 10000000.
+  #                                                                 Bits 01234567
+  # You then need to reverse the order of the binary value so it becomes 00000001
+  # So in this case Bit 7 is set to 1 so the PCI devices is multifunction capable.
+
+#  You can use this command to get offset 0E in binary form. Replace 0000:8a:00.0 with your PCI device address.
+#  echo "obase=2; ibase=16; $(lspci -x -s 0000:8a:00.0 | grep "00: \|\." | cut -d ' ' -f16)" | bc | rev
+#  Show Bit 7:  (8th bit if you count from 1)
+#  echo "obase=2; ibase=16; $(lspci -x -s 0000:8a:00.0 | grep "00: \|\." | cut -d ' ' -f16)" | bc | rev | cut -c 8
+
+#  Script to show all pci devices and their offset 0E in binary
+#  Needs to run with bash (apk add bash): /bin/bash
+
+#  lspci -x | grep "00: \|\." | while read -r line ; do
+#  if [[ "$line" == *"."* ]]; then
+#    echo $line
+#  else
+#    header_type=`echo $line | cut -d ' ' -f16`
+#    bin=`echo "obase=2; ibase=16; $header_type" | bc | rev`
+#    printf "%08d\n" $bin
+#  fi
+#  done
+
   
 # There's no need to add network devices to the boot order unless you need it for troubleshooting
 #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
