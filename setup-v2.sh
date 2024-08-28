@@ -468,14 +468,16 @@ elseif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ];
 fi
 
 
-
-# ls -l /sys/class/iommu/*/devices
+# This one is not reliable for checking IOMMU state
+# find /sys | grep dmar
 
 # shell string checks
 # -n  string is not null.
 # -z  string is null, that is, has zero length
 
-if [ -n "$(ls /sys/class/iommu)" ] && [ -n "$(find /sys | grep dmar)" ];
+# ls -l /sys/class/iommu/*/devices
+
+if [ -n "$(ls /sys/class/iommu)" ];
 then
 #  echo "contains files, iommu enabled in bios/uefi"
   IOMMU_STATE="enabled"
