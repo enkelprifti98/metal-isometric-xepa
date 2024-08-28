@@ -645,7 +645,7 @@ printf "\n\n"
 
 if [ "$IOMMU_STATE" == "disabled" ]; then
     echo "WARNING: IOMMU is disabled in $([ -d /sys/firmware/efi ] && echo UEFI || echo BIOS) so PCI Passthrough will not work!"
-    printf "\n\n"
+    printf "\n"
 fi
 
 
