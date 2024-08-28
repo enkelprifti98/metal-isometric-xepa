@@ -446,7 +446,7 @@ do
   #     00 <-- byte 0                  byte 14 --> 0E
   # 00: 72 11 00 00 06 01 10 00 01 00 00 ff 08 00 |80| 00
   #
-  # If byte 14 (offset 0E) is set (value = 0x80, setpci returns just 80), the device is multi-function -- else it is not.
+  # If byte 14 (offset 0E) is set (value = 0x80 or something else, setpci returns just 80), the device is multi-function -- else it is not.
   # You can convert the hex value 80 or whatever value you get to binary which should be 10000000.
   #                                                                 Bits 01234567
   # You then need to reverse the order of the binary value so it becomes 00000001
