@@ -390,13 +390,15 @@ do
   PCI_SLOT=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f1)
   PCI_FUNCTION=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f2)
 
-  PCI_MULTIFUNCTION_TEST=$(lspci -vvv -D -s $LINE | grep Function)
+  # Count how many functions are available for a specific pci device
+  PCI_DEV_ADDRESS=$(echo $LINE | cut -d "." -f1)
+  PCI_DEV_FUNCTION_COUNT=$(lspci -D -s $PCI_DEV_ADDRESS.* | wc -l)
 
-  if [ "$PCI_MULTIFUNCTION_TEST" == "" ]; then
-      # echo "not multifunction capable"
-      PCI_MULTI_FUNCTION=off
-  else
+  if [ "$PCI_DEV_FUNCTION_COUNT" -gt "1" ]; then
+      # echo "PCI device is multifunction capable"
       PCI_MULTI_FUNCTION=on
+  else
+      PCI_MULTI_FUNCTION=off
   fi
 
   VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE$',boot.order='$NUM,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
@@ -421,13 +423,15 @@ do
   PCI_SLOT=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f1)
   PCI_FUNCTION=$(echo $LINE | cut -d ":" -f3 | cut -d "." -f2)
 
-  PCI_MULTIFUNCTION_TEST=$(lspci -vvv -D -s $LINE | grep Function)
+  # Count how many functions are available for a specific pci device
+  PCI_DEV_ADDRESS=$(echo $LINE | cut -d "." -f1)
+  PCI_DEV_FUNCTION_COUNT=$(lspci -D -s $PCI_DEV_ADDRESS.* | wc -l)
 
-  if [ "$PCI_MULTIFUNCTION_TEST" == "" ]; then
-      # echo "not multifunction capable"
-      PCI_MULTI_FUNCTION=off
-  else
+  if [ "$PCI_DEV_FUNCTION_COUNT" -gt "1" ]; then
+      # echo "PCI device is multifunction capable"
       PCI_MULTI_FUNCTION=on
+  else
+      PCI_MULTI_FUNCTION=off
   fi
   
 # There's no need to add network devices to the boot order unless you need it for troubleshooting
