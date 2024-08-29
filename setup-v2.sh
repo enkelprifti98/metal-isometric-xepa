@@ -742,8 +742,8 @@ ifdown \$MANAGEMENT_IF_NAME
                         "vlan_assignments":[{"vlan":"'\$VLAN_UUID'","state":"unassigned","native":false}]
                 }')
         sleep 1
-        if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
-                echo $OUTPUT | jq
+        if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
+                echo \$OUTPUT | jq
         else
                 echo "Done..."
         fi
