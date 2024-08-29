@@ -488,6 +488,20 @@ done
 
 echo "$VIRT_INSTALL_PCI_DEVICES"
 
+# $VIRT_INSTALL_PCI_DEVICES contains the host PCI devices that will be passed to the XEPA VM.
+# virt-install / libvirt have the ability to define the PCI address that the device will appear as in the guest VM and we're setting it to match with the host PCI device address.
+# The only difference between the host and guest will be the PCI bus id / pcie-root-port / physical slot and it seems to be difficult or impossible to make the VM match with the host.
+# Some operating systems such as Ubuntu will assign different network interface names for PCI NICs while attached to the VM versus the host due to that slot number / physical location difference.
+# You can check the Physical Slot with  lspci -v -D -s 0000:8a:00.0
+# The pci physical slot and address assocation is found with: cat /sys/bus/pci/slots/${slot_num}/address
+# For newer linux distributions you might see network interface names like the following:
+# eno: Names containing the index numbers provided by firmware/BIOS for on-board devices, example: eno1 (eno = Onboard).
+# ens: Names containing the PCI Express hotplug slot numbers provided by the firmware/BIOS, example: ens1 (ens = Slot).
+# enp: Names containing the physical/geographical location of the hardware's port, example: enp2s0 (enp = Position).
+# enx: Names containing the MAC address of the interface (example: enx78e7d1ea46da).
+# eth: Classic unpredictable kernel-native ethX naming (example: eth0).
+
+
 # Passing a string of parameters as a variable to virt-install doesn't seem to work as it seems like a formatting issue
 # It works by evaluating the content of the string as shell code
 # eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
