@@ -748,20 +748,6 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo "Done..."
         fi
 
-        echo "Converting the Server to Layer 3 Bonded networking mode..."
-        sleep 1
-        OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/bond" \\
-                -X POST \\
-                -H "Content-Type: application/json" \\
-                -H "X-Auth-Token: \$AUTH_TOKEN" \\
-                --data '')
-        sleep 1
-        if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
-                echo \$OUTPUT | jq
-        else
-                echo "Done..."
-        fi
-
         # Deleting the Elastic IP block or VLAN associated with a Metal Gateway will automatically delete the Metal Gateway as well
         
         echo "Deleting Elastic IP block..."
@@ -782,6 +768,20 @@ ifdown \$MANAGEMENT_IF_NAME
         sleep 1
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/virtual-networks/\$VLAN_UUID" \\
                 -X DELETE \\
+                -H "Content-Type: application/json" \\
+                -H "X-Auth-Token: \$AUTH_TOKEN" \\
+                --data '')
+        sleep 1
+        if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
+                echo \$OUTPUT | jq
+        else
+                echo "Done..."
+        fi
+
+        echo "Converting the Server to Layer 3 Bonded networking mode..."
+        sleep 1
+        OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/bond" \\
+                -X POST \\
                 -H "Content-Type: application/json" \\
                 -H "X-Auth-Token: \$AUTH_TOKEN" \\
                 --data '')
