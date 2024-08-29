@@ -702,13 +702,15 @@ iface $MANAGEMENT_IF_NAME inet static
     netmask $NETMASK
 EOF
 
-
 ifup $MANAGEMENT_IF_NAME
 
 ip route del default
 ip route add default via $GATEWAY
 
-#ifdown eth0 doesn't work when eth0 isn't defined in /etc/network/interfaces
+# this is needed to make ifup sync with the current interface state otherwise ifdown won't work
+ifup $ETH0_IF_NAME
+
+# ifdown eth0 doesn't work when eth0 isn't defined in /etc/network/interfaces
 ifdown $ETH0_IF_NAME
 
 #ip link set $ETH0_IF_NAME down
