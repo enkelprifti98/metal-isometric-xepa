@@ -734,7 +734,7 @@ ifdown \$MANAGEMENT_IF_NAME
 
         echo "Detaching XEPA-MANAGEMENT-VLAN from the server..."
         sleep 1
-        OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/vlan-assignments/batches" \\
+        OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/vlan-assignments/batches" \\
                 -X POST \\
                 -H "Content-Type: application/json" \\
                 -H "X-Auth-Token: \$AUTH_TOKEN" \\
