@@ -709,9 +709,9 @@ ip route del default
 ip route add default via $GATEWAY
 
 #ifdown eth0 doesn't work when eth0 isn't defined in /etc/network/interfaces
-ifdown ETH0_IF_NAME
+ifdown $ETH0_IF_NAME
 
-#ip link set eth0 down
+#ip link set $ETH0_IF_NAME down
 
 nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
 
