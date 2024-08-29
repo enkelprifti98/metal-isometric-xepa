@@ -492,6 +492,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # virt-install / libvirt have the ability to define the PCI address that the device will appear as in the guest VM and we're setting it to match with the host PCI device address.
 # The only difference between the host and guest will be the PCI bus id / pcie-root-port / physical slot and it seems to be difficult or impossible to make the VM match with the host.
 # Some operating systems such as Ubuntu will assign different network interface names for PCI NICs while attached to the VM versus the host due to that slot number / physical location difference.
+# However this is not an issue as the network interface configuration will still persist due to the matching PCI address of the host and guest vm. Ubuntu will show the guest vm's interface name as altname when you run ip a.
 # You can check the Physical Slot with  lspci -v -D -s 0000:8a:00.0
 # The pci physical slot and address assocation is found with: cat /sys/bus/pci/slots/${slot_num}/address
 # For newer linux distributions you might see network interface names like the following:
