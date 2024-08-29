@@ -716,7 +716,7 @@ nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
 cat > /root/cleanup.sh <<EOF
 #!/bin/sh
 
-# Since we are using the same variable names we need to escape the $ character with a backslash \\
+# Since we are using the same variable names as the parent script we need to escape the $ and backslash character with a backslash \\
 
 AUTH_TOKEN=$AUTH_TOKEN
 INSTANCE_ID=$INSTANCE_ID
