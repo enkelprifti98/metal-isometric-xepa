@@ -176,9 +176,11 @@ nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null
 
 curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
-#PUBLIC_IP=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
+ETH0_PUBLIC_IPV4=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
+ETH0_PUBLIC_IPV4_NETMASK=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
+ETH0_PUBLIC_IPV4_GATEWAY=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
 
-#nohup filebrowser -r /root -a $PUBLIC_IP -p 8080 > /dev/null 2>&1 &
+#nohup filebrowser -r /root -a $ETH0_PUBLIC_IPV4 -p 8080 > /dev/null 2>&1 &
 
 mkdir /root/Downloads
 
@@ -230,6 +232,11 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
     # Get proper management interface by checking the metadata with the OS
     if [ "$MANAGEMENT_METADATA_MAC" == "$LOCAL_MAC" ]; then
         MANAGEMENT_IF_NAME=$LINE
+    fi
+
+    # Get proper eth0 interface by checking the metadata with the OS
+    if [ "$ETH0_METADATA_MAC" == "$LOCAL_MAC" ]; then
+        ETH0_IF_NAME=$LINE
     fi
 
     PCI_ID=$(grep PCI_SLOT_NAME /sys/class/net/$LINE/device/uevent | cut -d "=" -f2)
@@ -684,6 +691,11 @@ fi
 
 cat >> /etc/network/interfaces <<EOF
 
+auto $ETH0_IF_NAME
+iface $ETH0_IF_NAME inet static
+    address $ETH0_PUBLIC_IPV4
+    netmask $ETH0_PUBLIC_IPV4_NETMASK
+
 auto $MANAGEMENT_IF_NAME
 iface $MANAGEMENT_IF_NAME inet static
     address $SERVER_IP
@@ -699,6 +711,18 @@ ip route add default via $GATEWAY
 ip link set eth0 down
 
 nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
+
+
+cat > /root/cleanup.sh <<EOF
+#!/bin/sh
+
+INSTANCE_ID=$INSTANCE_ID
+
+echo "test cleanup"
+EOF
+
+chmod +x /root/cleanup.sh
+
 
 printf "\n\n"
 echo "The ISO installation environment is available at:"
