@@ -767,6 +767,9 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo "Done..."
         fi
 
+        # Giving the API some time to learn that there are no server network ports attached to the VLAN
+        sleep 3
+
         echo "Deleting XEPA-MANAGEMENT-VLAN..."
         sleep 1
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/virtual-networks/\$VLAN_UUID" \\
