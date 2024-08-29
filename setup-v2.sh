@@ -808,6 +808,7 @@ chmod +x /root/cleanup.sh
 # The scripts must be executable: chmod +x script.stop
 # The local service must be started for .stop scripts to run when the local service stops on reboot
 # You can check the local service status with: rc-service local status
+# For manual testing you can start/stop the local service with: rc-service local start  and  rc-service local stop
 # This is useful so that when the user runs reboot it will automatically cleanup API objects
 
 cp /root/cleanup.sh /etc/local.d/cleanup.sh.stop
