@@ -716,9 +716,38 @@ nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
 cat > /root/cleanup.sh <<EOF
 #!/bin/sh
 
-INSTANCE_ID=$INSTANCE_ID
+# Since we are using the same variable names we need to escape the $ character with a backslash \\
 
-echo "test cleanup"
+AUTH_TOKEN=$AUTH_TOKEN
+INSTANCE_ID=$INSTANCE_ID
+MANAGEMENT_IF_NAME=$MANAGEMENT_IF_NAME
+ETH0_IF_NAME=$ETH0_IF_NAME
+ETH0_PUBLIC_IPV4_GATEWAY=$ETH0_PUBLIC_IPV4_NETMASK
+VLAN_UUID=$VLAN_UUID
+IP_UUID=$IP_UUID
+NETWORK_PORT_ID=$NETWORK_PORT_ID
+
+ifup \$ETH0_IF_NAME
+ip route del default
+ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
+ifdown \$MANAGEMENT_IF_NAME
+
+        echo "Detaching XEPA-MANAGEMENT-VLAN from the server..."
+        sleep 1
+        OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/vlan-assignments/batches" \\
+                -X POST \\
+                -H "Content-Type: application/json" \\
+                -H "X-Auth-Token: \$AUTH_TOKEN" \\
+                --data '{
+                        "vlan_assignments":[{"vlan":"'\$VLAN_UUID'","state":"unassigned","native":false}]
+                }')
+        sleep 1
+        if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
+                echo $OUTPUT | jq
+        else
+                echo "Done..."
+        fi
+
 EOF
 
 chmod +x /root/cleanup.sh
