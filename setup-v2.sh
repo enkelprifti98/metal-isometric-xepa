@@ -804,6 +804,16 @@ EOF
 
 chmod +x /root/cleanup.sh
 
+# Adding scripts ending with .start or .stop makes them run on startup or shutdown when the local service starts or stops
+# The scripts must be executable: chmod +x script.stop
+# The local service must be started for .stop scripts to run when the local service stops on reboot
+# You can check the local service status with: rc-service local status
+# This is useful so that when the user runs reboot it will automatically cleanup API objects
+
+cp /root/cleanup.sh /etc/local.d/cleanup.sh.stop
+rc-update add local
+rc-service local start
+
 
 printf "\n\n"
 echo "The ISO installation environment is available at:"
