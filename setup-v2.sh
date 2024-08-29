@@ -702,13 +702,16 @@ iface $MANAGEMENT_IF_NAME inet static
     netmask $NETMASK
 EOF
 
+
 ifup $MANAGEMENT_IF_NAME
 
 ip route del default
 ip route add default via $GATEWAY
 
-#ifdown eth0 doesn't work because eth0 isn't defined in /etc/network/interfaces
-ip link set eth0 down
+#ifdown eth0 doesn't work when eth0 isn't defined in /etc/network/interfaces
+ifdown ETH0_IF_NAME
+
+#ip link set eth0 down
 
 nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
 
