@@ -320,6 +320,8 @@ echo
 for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
 do
 
+# Get the amount of words separated by a backslash
+# Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
 WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
 WORD_COUNT=$(( WORD_COUNT + 1 ))
 PCI_ID_FOUND=false
@@ -368,6 +370,8 @@ done
 for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9, $10, $11}')
 do
 
+# Get the amount of words separated by a backslash
+# Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
 WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
 WORD_COUNT=$(( WORD_COUNT + 1 ))
 PCI_ID_FOUND=false
