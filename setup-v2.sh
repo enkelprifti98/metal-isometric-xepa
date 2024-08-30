@@ -582,7 +582,7 @@ METRO=$(echo $METADATA | jq -r .metro)
 echo "METRO: $METRO"
 API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
 PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
-echo $PROJECT_UUID
+echo "PROJECT ID: $PROJECT_UUID"
 
         echo "Creating the XEPA-MANAGEMENT VLAN..."
         sleep 1
