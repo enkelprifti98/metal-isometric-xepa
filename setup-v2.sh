@@ -804,7 +804,7 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo \$OUTPUT | jq
                 if (echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned" > /dev/null); then
                     if [ "\$ATTEMPT" -eq 5 ]; then
-                        echo "5 attempts to delete the VLAN failed, skipping this step"
+                        echo "5 attempts to delete the VLAN failed, try again later, skipping this step..."
                         break
                     fi
                     echo "VLAN still has a server port attached"
