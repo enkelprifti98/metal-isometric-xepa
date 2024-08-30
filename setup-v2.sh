@@ -322,6 +322,7 @@ do
 
 # Get the amount of words separated by a backslash
 # Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
+# Some servers have their storage controllers connected to host or PCI bridges which have their own PCI addresses so that's why we need to start from the right end and go towards the left
 WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
 WORD_COUNT=$(( WORD_COUNT + 1 ))
 PCI_ID_FOUND=false
@@ -372,6 +373,7 @@ do
 
 # Get the amount of words separated by a backslash
 # Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
+# Some servers have their storage controllers connected to host or PCI bridges which have their own PCI addresses so that's why we need to start from the right end and go towards the left
 WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
 WORD_COUNT=$(( WORD_COUNT + 1 ))
 PCI_ID_FOUND=false
