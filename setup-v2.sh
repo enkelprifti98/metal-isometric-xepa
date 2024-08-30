@@ -792,7 +792,7 @@ ifdown \$MANAGEMENT_IF_NAME
         echo "Deleting XEPA-MANAGEMENT VLAN..."
         sleep 1
         VLAN_DELETED=false
-        ATTEMPT=5
+        ATTEMPT=1
         while [ "\$VLAN_DELETED" = "false" ] && [ "\$ATTEMPT" -lt 6 ]; do
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/virtual-networks/\$VLAN_UUID" \\
                 -X DELETE \\
@@ -802,7 +802,7 @@ ifdown \$MANAGEMENT_IF_NAME
         sleep 1
         if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo \$OUTPUT | jq
-                if [ $(echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned") ]; then
+                if [ \$(echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned") ]; then
                     if [ "\$ATTEMPT" -eq 5 ]; then
                         echo "5 attempts to delete the VLAN failed, skipping this step"
                         break
