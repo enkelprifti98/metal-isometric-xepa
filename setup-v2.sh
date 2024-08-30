@@ -186,6 +186,9 @@ mkdir /root/Downloads
 
 clear
 
+# This virsh command lists PCI devices and their tree
+# virsh nodedev-list --tree
+
 # Network Interface PCI information
 
 # lshw -c network
