@@ -600,7 +600,7 @@ echo $PROJECT_UUID
                 }')
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
-                echo $OUTPUT | jq .errors
+                echo $OUTPUT | jq
                 if [ $(echo $OUTPUT | jq .errors | grep -Eo "already has a vlan") ]; then
                     echo "VLAN $VXLAN already exists, trying another VLAN ID"
                     VXLAN=$(( VXLAN + 1 ))
@@ -791,6 +791,9 @@ ifdown \$MANAGEMENT_IF_NAME
 
         echo "Deleting XEPA-MANAGEMENT VLAN..."
         sleep 1
+        VLAN_DELETED=false
+        ATTEMPT=5
+        while [ "\$VLAN_DELETED" = "false" ] && [ "\$ATTEMPT" -lt 6 ]; do
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/virtual-networks/\$VLAN_UUID" \\
                 -X DELETE \\
                 -H "Content-Type: application/json" \\
@@ -799,10 +802,24 @@ ifdown \$MANAGEMENT_IF_NAME
         sleep 1
         if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo \$OUTPUT | jq
+                if [ $(echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned") ]; then
+                    if [ "\$ATTEMPT" -eq 5 ]; then
+                        echo "5 attempts to delete the VLAN failed, skipping this step"
+                        break
+                    fi
+                    echo "VLAN still has a server port attached"
+                    echo "This is usually due to a minor delay until the API is aware that the port was detached from the VLAN"
+                    echo "Trying to delete the XEPA-MANAGEMENT VLAN again..."
+                    ATTEMPT=\$(( ATTEMPT + 1 ))
+                else
+                    break
+                fi
         else
+                VLAN_DELETED=true
                 echo "Done..."
         fi
-
+        done
+        
         echo "Converting the Server to Layer 3 Bonded networking mode..."
         sleep 1
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/bond" \\
