@@ -579,26 +579,37 @@ API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet
 PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
 echo $PROJECT_UUID
 
-        echo "Creating the XEPA-MANAGEMENT-VLAN..."
+        echo "Creating the XEPA-MANAGEMENT VLAN..."
         sleep 1
+        VXLAN=1337
+        VLAN_CREATED=false
+        while [ "$VLAN_CREATED" = "false" ]; do
         OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/projects/$PROJECT_UUID/virtual-networks" \
                 -X POST \
                 -H "Content-Type: application/json" \
                 -H "X-Auth-Token: $AUTH_TOKEN" \
                 --data '{
-                        "vxlan":3500,
+                        "vxlan":'$VXLAN',
                         "metro":"'${METRO}'",
                         "description":"xepa-management"
                 }')
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
-                echo $OUTPUT | jq
+                echo $OUTPUT | jq .errors
+                if [ $(echo $OUTPUT | jq .errors | grep -Eo "already has a vlan") ]; then
+                    echo "VLAN $VXLAN already exists, trying another VLAN ID"
+                    VXLAN=$(( VXLAN + 1 ))
+                else
+                    break
+                fi
         else
                 echo "Here is the new VLAN..."
                 echo "$OUTPUT" | jq
                 VLAN_UUID=$(echo $OUTPUT | jq -r .id)
+                VLAN_CREATED=true
                 echo "Done..."
         fi
+        done
 
         echo "Creating the Elastic IP Block..."
         sleep 1
@@ -673,7 +684,7 @@ fi
                 echo "Done..."
         fi
 
-        echo "Attaching XEPA-MANAGEMENT-VLAN to the server..."
+        echo "Attaching XEPA-MANAGEMENT VLAN to the server..."
         sleep 1
         OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/ports/$NETWORK_PORT_ID/vlan-assignments/batches" \
                 -X POST \
@@ -727,6 +738,7 @@ AUTH_TOKEN=$AUTH_TOKEN
 INSTANCE_ID=$INSTANCE_ID
 MANAGEMENT_IF_NAME=$MANAGEMENT_IF_NAME
 ETH0_IF_NAME=$ETH0_IF_NAME
+ETH0_PUBLIC_IPV4=$ETH0_PUBLIC_IPV4
 ETH0_PUBLIC_IPV4_GATEWAY=$ETH0_PUBLIC_IPV4_GATEWAY
 VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
@@ -737,7 +749,7 @@ ip route del default
 ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
 ifdown \$MANAGEMENT_IF_NAME
 
-        echo "Detaching XEPA-MANAGEMENT-VLAN from the server..."
+        echo "Detaching XEPA-MANAGEMENT VLAN from the server..."
         sleep 1
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/vlan-assignments/batches" \\
                 -X POST \\
@@ -772,7 +784,7 @@ ifdown \$MANAGEMENT_IF_NAME
         # Giving the API some time to learn that there are no server network ports attached to the VLAN
         sleep 3
 
-        echo "Deleting XEPA-MANAGEMENT-VLAN..."
+        echo "Deleting XEPA-MANAGEMENT VLAN..."
         sleep 1
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/virtual-networks/\$VLAN_UUID" \\
                 -X DELETE \\
@@ -799,6 +811,11 @@ ifdown \$MANAGEMENT_IF_NAME
         else
                 echo "Done..."
         fi
+
+echo "The ISO installation environment endpoint has changed to the server's management IP:"
+printf "\n"
+echo "http://\$ETH0_PUBLIC_IPV4/"
+printf "\n"
 
 EOF
 
