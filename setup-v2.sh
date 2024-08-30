@@ -802,7 +802,7 @@ ifdown \$MANAGEMENT_IF_NAME
         sleep 1
         if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo \$OUTPUT | jq
-                if [ \$(echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned") ]; then
+                if (echo \$OUTPUT | jq .errors | grep -Eo "Cannot delete Virtual Network when port is assigned" > /dev/null); then
                     if [ "\$ATTEMPT" -eq 5 ]; then
                         echo "5 attempts to delete the VLAN failed, skipping this step"
                         break
