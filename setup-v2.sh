@@ -558,6 +558,8 @@ else
   IOMMU_STATE="disabled"
 fi
 
+printf "\n"
+
 if [ "$IOMMU_STATE" == "enabled" ]; then
     echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
     eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
@@ -572,9 +574,9 @@ fi
 
 
 INSTANCE_ID=$(echo $METADATA | jq -r .id)
-echo $INSTANCE_ID
+echo "INSTANCE ID: $INSTANCE_ID"
 METRO=$(echo $METADATA | jq -r .metro)
-echo $METRO
+echo "METRO: $METRO
 API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
 PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
 echo $PROJECT_UUID
@@ -812,9 +814,14 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo "Done..."
         fi
 
-echo "The ISO installation environment endpoint has changed to the server's management IP:"
+printf "\n"
+echo "The ISO installation environment endpoint has changed to the server's original management IP:"
 printf "\n"
 echo "http://\$ETH0_PUBLIC_IPV4/"
+printf "\n"
+echo "The File Transfer portal is available at:"
+printf "\n"
+echo "http://\$ETH0_PUBLIC_IPV4:8080/"
 printf "\n"
 
 EOF
