@@ -526,17 +526,20 @@ VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer 
 
 if [ -d /sys/firmware/efi ]; then
     VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi '
-fi
 
-SECURE_BOOT_STATE=$(mokutil --sb-state | grep "SecureBoot")
-# SecureBoot enabled  or  SecureBoot disabled
+    # Secure Boot is a UEFI/EFI feature, and requires a UEFI/EFI-based firmware to function. Legacy BIOS does not support Secure Boot.
+    
+    SECURE_BOOT_STATE=$(mokutil --sb-state | grep "SecureBoot")
+    # Returns  SecureBoot enabled  or  SecureBoot disabled
 
-if [ "$SECURE_BOOT_STATE" == "SecureBoot enabled" ]; then
-#    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader=/usr/share/qemu/edk2-x86_64-secure-code.fd,loader.readonly=yes,loader.type=pflash '
-#    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi,loader.secure=no '
-    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=yes '
-elseif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ];
-    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=no '
+    if [ "$SECURE_BOOT_STATE" == "SecureBoot enabled" ]; then
+    #    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader=/usr/share/qemu/edk2-x86_64-secure-code.fd,loader.readonly=yes,loader.type=pflash '
+    #    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi,loader.secure=no '
+        VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=yes '
+    elif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ];
+        VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=no '
+    fi
+    
 fi
 
 
