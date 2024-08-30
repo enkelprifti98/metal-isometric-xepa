@@ -536,7 +536,7 @@ if [ -d /sys/firmware/efi ]; then
     #    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader=/usr/share/qemu/edk2-x86_64-secure-code.fd,loader.readonly=yes,loader.type=pflash '
     #    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot uefi,loader.secure=no '
         VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=yes '
-    elif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ];
+    elif [ "$SECURE_BOOT_STATE" == "SecureBoot disabled" ]; then
         VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--boot loader.secure=no '
     fi
     
