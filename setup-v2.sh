@@ -810,6 +810,7 @@ ifdown \$MANAGEMENT_IF_NAME
                     echo "VLAN still has a server port attached"
                     echo "This is usually due to a minor delay until the API is aware that the port was detached from the VLAN"
                     echo "Trying to delete the XEPA-MANAGEMENT VLAN again..."
+                    sleep 2
                     ATTEMPT=\$(( ATTEMPT + 1 ))
                 else
                     break
