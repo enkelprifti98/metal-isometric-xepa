@@ -35,7 +35,7 @@ sed -i '/edge/d' /etc/apk/repositories
 # Install XFCE GUI, VNC server, and other necessary packages
 # The standard gtk+3.0 required package seems to fail, installing gtk+3.0-dev works so startxfce4 runs successfully.
 
-apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils gparted gzip p7zip cpio tar unzip xarchiver ethtool mokutil gtk+3.0-dev \
+apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils lshw gparted gzip p7zip cpio tar unzip xarchiver ethtool mokutil gtk+3.0-dev \
 --update
 
 
@@ -188,6 +188,8 @@ clear
 
 # Network Interface PCI information
 
+# lshw -c network
+
 NETWORK_PCI_LIST=""
 
 #IFS=$'\n'
@@ -304,6 +306,8 @@ done
 
 
 # Storage drive information and PCI mapping
+
+# lshw -c storage
 
 STORAGE_PCI_LIST=""
 
