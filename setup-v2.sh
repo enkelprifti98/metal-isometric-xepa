@@ -472,6 +472,10 @@ do
 #  echo "obase=2; ibase=16; $(lspci -x -s 0000:8a:00.0 | grep "00: \|\." | cut -d ' ' -f16)" | bc | rev
 #  Show Bit 7:  (8th bit if you count from 1)
 #  echo "obase=2; ibase=16; $(lspci -x -s 0000:8a:00.0 | grep "00: \|\." | cut -d ' ' -f16)" | bc | rev | cut -c 8
+#  Alternative option for binary form:
+#  echo "obase=2; ibase=16; $(setpci -s 0000:8a:00.0 0E.B)" | bc | rev
+#  Show Bit 7:  (8th bit if you count from 1)
+#  echo "obase=2; ibase=16; $(setpci -s 0000:8a:00.0 0E.B)" | bc | rev | cut -c 8
 
 #  Script to show all pci devices and their offset 0E in binary
 #  Needs to run with bash (apk add bash): /bin/bash
