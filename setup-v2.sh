@@ -320,7 +320,17 @@ echo
 for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
 do
 
-PCI_ID=$(echo $LINE | cut -d "/" -f4)
+WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
+WORD_COUNT=$(( WORD_COUNT + 1 ))
+PCI_ID_FOUND=false
+while [ $WORD_COUNT -gt 1 ] && [ $PCI_ID_FOUND == "false" ]; do
+    if [ $(echo $LINE | cut -d "/" -f$WORD_COUNT | grep -Eo "....:..:..\..") ]; then
+        PCI_ID_FOUND=true
+        PCI_ID=$(echo $LINE | cut -d "/" -f$WORD_COUNT)
+    else
+        WORD_COUNT=$(( WORD_COUNT - 1 ))
+    fi
+done
 
 PCI_EXISTS_IN_LIST="false"
 
@@ -358,7 +368,17 @@ done
 for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9, $10, $11}')
 do
 
-PCI_ID=$(echo $LINE | cut -d "/" -f5)
+WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
+WORD_COUNT=$(( WORD_COUNT + 1 ))
+PCI_ID_FOUND=false
+while [ $WORD_COUNT -gt 1 ] && [ $PCI_ID_FOUND == "false" ]; do
+    if [ $(echo $LINE | cut -d "/" -f$WORD_COUNT | grep -Eo "....:..:..\..") ]; then
+        PCI_ID_FOUND=true
+        PCI_ID=$(echo $LINE | cut -d "/" -f$WORD_COUNT)
+    else
+        WORD_COUNT=$(( WORD_COUNT - 1 ))
+    fi
+done
 
 PCI_EXISTS_IN_LIST="false"
 
