@@ -213,9 +213,9 @@ else
 
 fi
 
-echo
-echo "Network interfaces:"
-echo
+echo > /root/pci-device-info
+echo "Network interfaces:" >> /root/pci-device-info
+echo >> /root/pci-device-info
 
 for i in $(seq 1 $INTERFACES_COUNT)
 do
@@ -296,12 +296,12 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
 # only add API Interface name if OS name is different
 
     if [ "$METADATA_IF_NAME" == "$LINE" ]; then
-        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/"
+        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/" >> /root/pci-device-info
     else
-        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/" | sed "s/$/ (API name: $METADATA_IF_NAME)/"
+        lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' | sed "s/$/ ($LINE)/" | sed "s/$/ (API name: $METADATA_IF_NAME)/" >> /root/pci-device-info
     fi
 
-    echo
+    echo >> /root/pci-device-info
     break
 fi
 done
@@ -314,10 +314,10 @@ done
 
 STORAGE_PCI_LIST=""
 
-IFS=$'\n'
-echo
-echo "Local storage drives:"
-echo
+IFS=$'\n' >> /root/pci-device-info
+echo >> /root/pci-device-info
+echo "Local storage drives:" >> /root/pci-device-info
+echo >> /root/pci-device-info
 
 #SATA drives
 for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
@@ -362,10 +362,10 @@ if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
 fi
 
 
-lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
-DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
-lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
-echo
+lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' >> /root/pci-device-info
+DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#') >> /root/pci-device-info
+lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #' >> /root/pci-device-info
+echo >> /root/pci-device-info
 
 done
 
@@ -412,13 +412,14 @@ if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
 
 fi
 
-lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
-DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
-lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
-echo
+lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #' >> /root/pci-device-info
+DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#') >> /root/pci-device-info
+lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #' >> /root/pci-device-info
+echo >> /root/pci-device-info
 
 done
 
+cat /root/pci-device-info
 
 # virt-install PCI device boot order
 
@@ -897,6 +898,7 @@ cp /root/cleanup.sh /etc/local.d/cleanup.sh.stop
 rc-update add local
 rc-service local start
 
+cat /root/pci-device-info
 
 printf "\n\n"
 echo "The ISO installation environment is available at:"
