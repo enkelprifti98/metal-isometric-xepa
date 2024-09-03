@@ -205,7 +205,21 @@ echo
 for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9, $10, $11}')
 do
 
-PCI_ID=$(echo $LINE | cut -d "/" -f4)
+# Get the amount of words separated by a backslash
+# Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
+# Some servers have their storage controllers connected to host or PCI bridges which have their own PCI addresses so that's why we need to start from the right end and go towards the left
+WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
+WORD_COUNT=$(( WORD_COUNT + 1 ))
+PCI_ID_FOUND=false
+while [ $WORD_COUNT -gt 1 ] && [ $PCI_ID_FOUND == "false" ]; do
+    if [ $(echo $LINE | cut -d "/" -f$WORD_COUNT | grep -Eo "....:..:..\..") ]; then
+        PCI_ID_FOUND=true
+        PCI_ID=$(echo $LINE | cut -d "/" -f$WORD_COUNT)
+    else
+        WORD_COUNT=$(( WORD_COUNT - 1 ))
+    fi
+done
+
 lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
 DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
 lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
@@ -217,7 +231,21 @@ done
 for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9, $10, $11}')
 do
 
-PCI_ID=$(echo $LINE | cut -d "/" -f5)
+# Get the amount of words separated by a backslash
+# Then run a a while loop starting from word count and reducing by one so we go in the left direction and stop when you find the first word that matches the format of a PCI address
+# Some servers have their storage controllers connected to host or PCI bridges which have their own PCI addresses so that's why we need to start from the right end and go towards the left
+WORD_COUNT=$(echo $LINE | grep -o "/" | wc -l)
+WORD_COUNT=$(( WORD_COUNT + 1 ))
+PCI_ID_FOUND=false
+while [ $WORD_COUNT -gt 1 ] && [ $PCI_ID_FOUND == "false" ]; do
+    if [ $(echo $LINE | cut -d "/" -f$WORD_COUNT | grep -Eo "....:..:..\..") ]; then
+        PCI_ID_FOUND=true
+        PCI_ID=$(echo $LINE | cut -d "/" -f$WORD_COUNT)
+    else
+        WORD_COUNT=$(( WORD_COUNT - 1 ))
+    fi
+done
+
 lspci -D | grep $PCI_ID | sed 's#^#PCI BDF #'
 DEVICE_PATH=$(echo $LINE | awk '{print $1}' | sed 's#^#/dev/#')
 lsblk -p -o NAME,TYPE,SIZE,MODEL,TRAN,ROTA,HCTL,MOUNTPOINT $DEVICE_PATH | sed 's#NAME#PATH#' | sed 's#ROTA#DRIVE-TYPE#' | sed 's# 0 #SSD      #' | sed 's# 1 #HDD      #'
