@@ -205,7 +205,11 @@ mkdir /root/Downloads
 
 clear
 
+INSTANCE_ID=$(echo $METADATA | jq -r .id)
+METRO=$(echo $METADATA | jq -r .metro)
 API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
+PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
+
 
 # This virsh command lists PCI devices and their tree
 # virsh nodedev-list --tree
@@ -639,11 +643,8 @@ fi
 
 
 
-INSTANCE_ID=$(echo $METADATA | jq -r .id)
 echo "INSTANCE ID: $INSTANCE_ID"
-METRO=$(echo $METADATA | jq -r .metro)
 echo "METRO: $METRO"
-PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
 echo "PROJECT ID: $PROJECT_UUID"
 
         echo "Creating the XEPA-MANAGEMENT VLAN..."
