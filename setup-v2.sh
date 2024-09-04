@@ -889,9 +889,12 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo "Done..."
         fi
         done
-        
+
         echo "Converting the Server to Layer 3 Bonded networking mode..."
         sleep 1
+        SERVER_CONVERTED_TO_ORIGINAL_NETWORK_MODE=false
+        ATTEMPT=1
+        while [ "\$SERVER_CONVERTED_TO_ORIGINAL_NETWORK_MODE" = "false" ] && [ "\$ATTEMPT" -lt 6 ]; do
         OUTPUT=\$(curl -s "https://api.equinix.com/metal/v1/ports/\$NETWORK_PORT_ID/bond" \\
                 -X POST \\
                 -H "Content-Type: application/json" \\
@@ -900,9 +903,25 @@ ifdown \$MANAGEMENT_IF_NAME
         sleep 1
         if (echo \$OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo \$OUTPUT | jq
+                if (echo \$OUTPUT | jq .errors | grep -Eo "can't bond where virtual networks still assigned" > /dev/null); then
+                    if [ "\$ATTEMPT" -eq 5 ]; then
+                        echo "5 attempts to convert the network mode failed, try again later, skipping this step..."
+                        break
+                    fi
+                    echo "server port still has VLANs attached"
+                    echo "This is usually due to a minor delay until the API is aware that the port was detached from the VLAN"
+                    echo "Trying to convert the server network mode again..."
+                    sleep 2
+                    ATTEMPT=\$(( ATTEMPT + 1 ))
+                else
+                    break
+                fi
         else
+                SERVER_CONVERTED_TO_ORIGINAL_NETWORK_MODE=true
                 echo "Done..."
         fi
+        done
+        
 
 printf "\n"
 echo "The ISO installation environment endpoint has changed to the server's original management IP:"
