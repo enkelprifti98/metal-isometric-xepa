@@ -905,7 +905,7 @@ ifdown \$MANAGEMENT_IF_NAME
                 echo \$OUTPUT | jq
                 if (echo \$OUTPUT | jq .errors | grep -Eo "can't bond where virtual networks still assigned" > /dev/null); then
                     if [ "\$ATTEMPT" -eq 5 ]; then
-                        echo "5 attempts to convert the network mode failed, try again later, skipping this step..."
+                        echo "5 attempts to convert the network mode failed, check if you have other VLANs attached to the server, try again later, skipping this step..."
                         break
                     fi
                     echo "server port still has VLANs attached"
