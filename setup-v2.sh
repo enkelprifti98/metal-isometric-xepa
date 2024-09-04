@@ -791,17 +791,20 @@ echo "PROJECT ID: $PROJECT_UUID"
 
         fi
 
-if [ "$INTERFACES_COUNT" -gt  "3" ];then
+        # NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq --slurp '.[1]')
+        NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq --slurp 'last')
+
+#if [ "$INTERFACES_COUNT" -gt  "3" ];then
 
    # get network port id for eth2 on 4 port servers
-   NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth2") | .id')
+#   NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth2") | .id')
 
-else
+#else
 
    # get network port id for eth1 on 2 port servers
-   NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth1") | .id')
+#   NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.name == "eth1") | .id')
 
-fi
+#fi
 
         echo "Converting the Server to Hybrid Un-Bonded networking mode..."
         sleep 1
