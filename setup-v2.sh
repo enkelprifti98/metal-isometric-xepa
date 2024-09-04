@@ -7,6 +7,14 @@ echo
 echo "XEPA ISO INSTALLATION ENVIRONMENT"
 echo
 
+# Check for internet connectivity
+wget -q --spider http://google.com
+
+if [ $? -ne 0 ]; then
+    echo "Server has no internet connectivity, try again."
+    exit
+fi
+
 env | grep METAL_AUTH_TOKEN > /dev/null
 if [ $? -eq 0 ]; then
   echo "Reading Equinix Metal API key from METAL_AUTH_TOKEN environment variable"
