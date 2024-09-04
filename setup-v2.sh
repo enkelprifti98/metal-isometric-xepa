@@ -797,8 +797,8 @@ echo "PROJECT ID: $PROJECT_UUID"
 
         fi
 
-        # NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq --slurp '.[1]')
-        NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq --slurp 'last')
+        # NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq -r --slurp '.[1].id')
+        NETWORK_PORT_ID=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq -r --slurp 'last.id')
 
 #if [ "$INTERFACES_COUNT" -gt  "3" ];then
 
