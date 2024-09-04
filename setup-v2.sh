@@ -652,7 +652,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         then
             # VLAN ALREADY EXISTS
             echo "VLAN already exists"
-            echo VLAN_CHECK_IF_EXISTS | jq
+            echo $VLAN_CHECK_IF_EXISTS | jq
             VLAN_UUID=$(echo $VLAN_CHECK_IF_EXISTS | jq -r .id)
             VLAN_CREATED=true
         fi
