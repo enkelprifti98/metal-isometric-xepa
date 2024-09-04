@@ -195,9 +195,9 @@ nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null
 
 curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
-ETH0_PUBLIC_IPV4=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
-ETH0_PUBLIC_IPV4_NETMASK=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
-ETH0_PUBLIC_IPV4_GATEWAY=$(curl -s https://metadata.platformequinix.com/metadata | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
+ETH0_PUBLIC_IPV4=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
+ETH0_PUBLIC_IPV4_NETMASK=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
+ETH0_PUBLIC_IPV4_GATEWAY=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
 
 #nohup filebrowser -r /root -a $ETH0_PUBLIC_IPV4 -p 8080 > /dev/null 2>&1 &
 
@@ -215,7 +215,6 @@ clear
 NETWORK_PCI_LIST=""
 
 #IFS=$'\n'
-METADATA=$(curl -s metadata.packet.net/metadata)
 INTERFACES_COUNT=$(echo $METADATA | jq '.network.interfaces | length')
 
 if [ "$INTERFACES_COUNT" -gt  "2" ];then
