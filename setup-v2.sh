@@ -647,13 +647,17 @@ echo "PROJECT ID: $PROJECT_UUID"
 
         # Check if VLAN has been created already and use it
         VLAN_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/virtual-networks?metro=$METRO" | jq -r '.virtual_networks[] | select(.description == "xepa-management-'$INSTANCE_ID'")')
-        if [ -n "$VLAN_CHECK_IF_EXISTS" ];
-        then
-            # VLAN ALREADY EXISTS
-            echo "VLAN already exists"
-            echo $VLAN_CHECK_IF_EXISTS | jq
-            VLAN_UUID=$(echo $VLAN_CHECK_IF_EXISTS | jq -r .id)
-            VLAN_CREATED=true
+        if [ -n "$VLAN_CHECK_IF_EXISTS" ]; then
+            if (echo $VLAN_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
+                echo $VLAN_CHECK_IF_EXISTS | jq
+                echo "checking for existing vlan failed, trying to create a new vlan..."
+            else
+                # VLAN ALREADY EXISTS
+                echo "VLAN already exists"
+                echo $VLAN_CHECK_IF_EXISTS | jq
+                VLAN_UUID=$(echo $VLAN_CHECK_IF_EXISTS | jq -r .id)
+                VLAN_CREATED=true
+            fi
         fi
         
         while [ "$VLAN_CREATED" = "false" ]; do
@@ -673,7 +677,8 @@ echo "PROJECT ID: $PROJECT_UUID"
                     echo "VLAN $VXLAN already exists, trying another VLAN ID"
                     VXLAN=$(( VXLAN + 1 ))
                 else
-                    break
+                    echo "VLAN is required to proceed, try again, exiting..."
+                    exit
                 fi
         else
                 echo "Here is the new VLAN..."
@@ -686,6 +691,31 @@ echo "PROJECT ID: $PROJECT_UUID"
 
         echo "Creating the Elastic IP Block..."
         sleep 1
+
+        ELASTIC_IP_BLOCK_CREATED=false
+
+        # Check if Elastic IP block has been created already and use it
+        ELASTIC_IP_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true' | jq -r '.ip_addresses[] | select(.details == "xepa-management-'$INSTANCE_ID'")')
+        if [ -n "$ELASTIC_IP_CHECK_IF_EXISTS" ]; then
+            if (echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
+                echo $ELASTIC_IP_CHECK_IF_EXISTS | jq
+                echo "checking for existing Elastic IP failed, trying to create a new IP block..."
+            else
+                # ELASTIC IP BLOCK ALREADY EXISTS
+                echo "Elastic IP block already exists"
+                echo $ELASTIC_IP_CHECK_IF_EXISTS | jq
+                IP_UUID=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .id)
+                SERVER_IP=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .address)
+                NETMASK=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .netmask)
+                GATEWAY=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .gateway)
+                ELASTIC_IP_BLOCK_CREATED=true
+                echo "Done..."
+            fi
+        fi
+        
+
+        if [ "$ELASTIC_IP_BLOCK_CREATED" == "false" ]; then
+        
         OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/projects/$PROJECT_UUID/ips" \
                 -X POST \
                 -H "Content-Type: application/json" \
@@ -702,6 +732,8 @@ echo "PROJECT ID: $PROJECT_UUID"
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo $OUTPUT | jq
+                echo "Elastic IP block is required to proceed, try again, exiting..."
+                exit
         else
                 echo "Here is the new Elastic IP Block..."
                 echo "$OUTPUT" | jq
@@ -709,7 +741,10 @@ echo "PROJECT ID: $PROJECT_UUID"
                 SERVER_IP=$(echo $OUTPUT | jq -r .address)
                 NETMASK=$(echo $OUTPUT | jq -r .netmask)
                 GATEWAY=$(echo $OUTPUT | jq -r .gateway)
+                ELASTIC_IP_BLOCK_CREATED=true
                 echo "Done..."
+        fi
+
         fi
 
         echo "Creating the Metal Gateway..."
@@ -725,6 +760,8 @@ echo "PROJECT ID: $PROJECT_UUID"
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo $OUTPUT | jq
+                echo "Metal Gateway is required to proceed, try again, exiting..."
+                exit
         else
                 echo "Here is the new Metal Gateway..."
                 echo "$OUTPUT" | jq -r '{ "Metal Gateway ID":.id, "Metro":.virtual_network.metro_code, "VLAN":.virtual_network.vxlan, "Subnet":.ip_reservation | "\(.network)/\(.cidr)", "Gateway IP":.ip_reservation.gateway}'
@@ -753,6 +790,7 @@ fi
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
                 echo $OUTPUT | jq
+                echo 
         else
                 echo "Done..."
         fi
