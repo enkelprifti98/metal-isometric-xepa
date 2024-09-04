@@ -17,6 +17,14 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
+# Check for metadata service availability
+METADATA=$(curl -s metadata.packet.net/metadata)
+if (echo $METADATA | jq .message | grep -Eo "resource not found" > /dev/null); then
+    echo
+    echo "Metadata service isn't available. Try again."
+    exit
+fi
+
 env | grep METAL_AUTH_TOKEN > /dev/null
 if [ $? -eq 0 ]; then
   echo "Reading Equinix Metal API key from METAL_AUTH_TOKEN environment variable"
