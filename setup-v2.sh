@@ -646,7 +646,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         VLAN_CREATED=false
 
         # Check if VLAN has been created already and use it
-        VLAN_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/virtual-networks?metro=$METRO" | jq -r '.virtual_networks[] | select(.description == "xepa-management-'$INSTANCE_ID'")')
+        VLAN_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/virtual-networks?per_page=250&metro=$METRO" | jq -r '.virtual_networks[] | select(.description == "xepa-management-'$INSTANCE_ID'")')
         if [ -n "$VLAN_CHECK_IF_EXISTS" ]; then
             if (echo $VLAN_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
                 echo $VLAN_CHECK_IF_EXISTS | jq
@@ -695,7 +695,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         ELASTIC_IP_BLOCK_CREATED=false
 
         # Check if Elastic IP block has been created already and use it
-        ELASTIC_IP_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true" | jq -r '.ip_addresses[] | select(.details == "xepa-management-'$INSTANCE_ID'")')
+        ELASTIC_IP_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?per_page=250&metro=$METRO&public=true&ipv4=true" | jq -r '.ip_addresses[] | select(.details == "xepa-management-'$INSTANCE_ID'")')
         if [ -n "$ELASTIC_IP_CHECK_IF_EXISTS" ]; then
             if (echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
                 echo $ELASTIC_IP_CHECK_IF_EXISTS | jq
@@ -747,6 +747,26 @@ echo "PROJECT ID: $PROJECT_UUID"
 
         fi
 
+        METAL_GATEWAY_CREATED=false
+
+        # Check if Metal Gateway has been created already and use it
+        METAL_GATEWAY_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/metal-gateways?per_page=250&include=ip_reservation" | jq -r '.metal_gateways[].ip_reservation | select(.id == "'$IP_UUID'")')
+        if [ -n "$METAL_GATEWAY_CHECK_IF_EXISTS" ]; then
+            if (echo $METAL_GATEWAY_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
+                echo $METAL_GATEWAY_CHECK_IF_EXISTS | jq
+                echo "checking for existing Elastic IP failed, trying to create a new IP block..."
+            else
+                # METAL GATEWAY ALREADY EXISTS
+                echo "Metal Gateway already exists"
+                echo $METAL_GATEWAY_CHECK_IF_EXISTS | jq
+                METAL_GATEWAY_CREATED=true
+                echo "Done..."
+            fi
+        fi
+        
+
+        if [ "$METAL_GATEWAY_CREATED" == "false" ]; then
+
         echo "Creating the Metal Gateway..."
         sleep 1
         OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/projects/$PROJECT_UUID/metal-gateways?include=virtual_network,ip_reservation" \
@@ -766,6 +786,8 @@ echo "PROJECT ID: $PROJECT_UUID"
                 echo "Here is the new Metal Gateway..."
                 echo "$OUTPUT" | jq -r '{ "Metal Gateway ID":.id, "Metro":.virtual_network.metro_code, "VLAN":.virtual_network.vxlan, "Subnet":.ip_reservation | "\(.network)/\(.cidr)", "Gateway IP":.ip_reservation.gateway}'
                 echo "Done..."
+        fi
+
         fi
 
 if [ "$INTERFACES_COUNT" -gt  "3" ];then
