@@ -22,6 +22,7 @@ METADATA=$(curl -s metadata.packet.net/metadata)
 if (echo $METADATA | jq .message | grep -Eo "resource not found" > /dev/null); then
     echo
     echo "Metadata service isn't available. Try again."
+    echo
     exit
 fi
 
