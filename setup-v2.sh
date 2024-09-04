@@ -626,6 +626,16 @@ echo "PROJECT ID: $PROJECT_UUID"
         sleep 1
         VXLAN=1337
         VLAN_CREATED=false
+
+        # Check if VLAN has been created already and use it
+        VLAN_ID_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true" | jq -r '.ip_addresses[] | select(.details == "xepa-mgmt-'$INSTANCE_ID'") | .id')
+        if [ -n "$VLAN_ID_CHECK_IF_EXISTS" ];
+        then
+            # VLAN ALREADY EXISTS
+            VLAN_UUID=$VLAN_ID_CHECK_IF_EXISTS
+            VLAN_CREATED=true
+        fi
+        
         while [ "$VLAN_CREATED" = "false" ]; do
         OUTPUT=$(curl -s "https://api.equinix.com/metal/v1/projects/$PROJECT_UUID/virtual-networks" \
                 -X POST \
@@ -634,7 +644,7 @@ echo "PROJECT ID: $PROJECT_UUID"
                 --data '{
                         "vxlan":'$VXLAN',
                         "metro":"'${METRO}'",
-                        "description":"xepa-management"
+                        "description":"xepa-management-'$INSTANCE_ID'"
                 }')
         sleep 1
         if (echo $OUTPUT | jq -e 'has("errors")' > /dev/null); then
@@ -666,7 +676,7 @@ echo "PROJECT ID: $PROJECT_UUID"
                         "type":"public_ipv4",
                         "comments":"",
                         "customdata":"",
-                        "details":"xepa-management",
+                        "details":"xepa-management-'$INSTANCE_ID'",
                         "tags":[]
                 }')
         sleep 1
