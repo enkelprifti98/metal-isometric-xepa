@@ -205,6 +205,8 @@ mkdir /root/Downloads
 
 clear
 
+API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
+
 # This virsh command lists PCI devices and their tree
 # virsh nodedev-list --tree
 
@@ -217,19 +219,24 @@ NETWORK_PCI_LIST=""
 #IFS=$'\n'
 INTERFACES_COUNT=$(echo $METADATA | jq '.network.interfaces | length')
 
-if [ "$INTERFACES_COUNT" -gt  "2" ];then
+#if [ "$INTERFACES_COUNT" -gt  "2" ];then
 
    # get network port mac address for eth2 on 4 port servers
-   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth2") | .mac')
-   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
+#   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth2") | .mac')
+#   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
 
-else
+#else
 
    # get network port mac address for eth1 on 2 port servers
-   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth1") | .mac')
-   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
+#   MANAGEMENT_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth1") | .mac')
+#   ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
 
-fi
+#fi
+
+# get secondary bond0 network port mac address
+# MANAGEMENT_METADATA_MAC=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq -r --slurp '.[1].data.mac')
+MANAGEMENT_METADATA_MAC=$(echo $API_METADATA | jq -r '.network_ports[] | select(.bond.name == "bond0")' | jq -r --slurp 'last.data.mac')
+ETH0_METADATA_MAC=$(echo $METADATA | jq -r '.network.interfaces[] | select(.name == "eth0") | .mac')
 
 echo > /root/pci-device-info
 echo "Network interfaces:" >> /root/pci-device-info
@@ -636,7 +643,6 @@ INSTANCE_ID=$(echo $METADATA | jq -r .id)
 echo "INSTANCE ID: $INSTANCE_ID"
 METRO=$(echo $METADATA | jq -r .metro)
 echo "METRO: $METRO"
-API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
 PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
 echo "PROJECT ID: $PROJECT_UUID"
 
