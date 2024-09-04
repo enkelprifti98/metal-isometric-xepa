@@ -695,7 +695,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         ELASTIC_IP_BLOCK_CREATED=false
 
         # Check if Elastic IP block has been created already and use it
-        ELASTIC_IP_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true' | jq -r '.ip_addresses[] | select(.details == "xepa-management-'$INSTANCE_ID'")')
+        ELASTIC_IP_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true" | jq -r '.ip_addresses[] | select(.details == "xepa-management-'$INSTANCE_ID'")')
         if [ -n "$ELASTIC_IP_CHECK_IF_EXISTS" ]; then
             if (echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
                 echo $ELASTIC_IP_CHECK_IF_EXISTS | jq
