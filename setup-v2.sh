@@ -11,7 +11,9 @@ echo
 wget -q --spider http://google.com
 
 if [ $? -ne 0 ]; then
+    echo
     echo "Server has no internet connectivity, try again."
+    echo
     exit
 fi
 
