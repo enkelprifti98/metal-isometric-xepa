@@ -750,7 +750,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         METAL_GATEWAY_CREATED=false
 
         # Check if Metal Gateway has been created already and use it
-        METAL_GATEWAY_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/metal-gateways?per_page=250&include=ip_reservation" | jq -r '.metal_gateways[].ip_reservation | select(.id == "'$IP_UUID'")')
+        METAL_GATEWAY_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/metal-gateways?per_page=250&include=ip_reservation" | jq -r '.metal_gateways[] | select(.ip_reservation.id == "'$IP_UUID'")')
         if [ -n "$METAL_GATEWAY_CHECK_IF_EXISTS" ]; then
             if (echo $METAL_GATEWAY_CHECK_IF_EXISTS | jq -e 'has("errors")' > /dev/null); then
                 echo $METAL_GATEWAY_CHECK_IF_EXISTS | jq
