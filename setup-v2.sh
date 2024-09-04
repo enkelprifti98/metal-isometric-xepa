@@ -647,7 +647,7 @@ echo "PROJECT ID: $PROJECT_UUID"
         VLAN_CREATED=false
 
         # Check if VLAN has been created already and use it
-        VLAN_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/ips?metro=$METRO&public=true&ipv4=true" | jq -r '.ip_addresses[] | select(.details == "xepa-mgmt-'$INSTANCE_ID'")')
+        VLAN_CHECK_IF_EXISTS=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/projects/$PROJECT_UUID/virtual-networks?metro=$METRO' | jq -r '.virtual_networks[] | select(.description == "xepa-mgmt-'$INSTANCE_ID'")')
         if [ -n "$VLAN_CHECK_IF_EXISTS" ];
         then
             # VLAN ALREADY EXISTS
