@@ -25,6 +25,7 @@ if [[ "$*" == *"--restart"* ]]; then
     nohup /usr/bin/Xvfb :99 -screen 0 $RESOLUTION -ac +extension GLX +render -noreset > /dev/null 2>&1 &
 
     xfce4-session-logout --halt
+    pkill -f "/usr/bin/dbus-launch --sh-syntax --exit-with-session xfce4-session"
     nohup startxfce4 > /dev/null 2>&1 &
 
     nohup x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900 > /dev/null 2>&1 &
