@@ -452,9 +452,11 @@ For other operating systems, you need to install or enable the SSH server.
 
 ### Rebooting to the physical host
 
-Once we have completed the post installation steps, we can reboot over to the physical host.
+Once we have completed the post installation steps, we can prepare to reboot over to the physical host.
 
-Shut down the virtual machine and close all running applications. Then disconnect from the VNC console or close the web browser window.
+First shut down the virtual machine either through an option in the Operating System or use the `Shut Down` button of virtual machine manager. If the shutdown option doesn't work, use the `Force Off` option under the downard pointing arrow icon.
+
+Then close all running applications. Disconnect from the VNC console or close the web browser window.
 
 You can now reboot to the host by going to the server's Out-of-Band console and type `reboot`, then press `Enter`.
 
