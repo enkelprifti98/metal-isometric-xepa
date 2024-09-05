@@ -104,7 +104,7 @@ We need to install several packages to make the Rescue Mode environment ready fo
 
 #### Automated (recommended) (API key required)
 
-The automated option provides the best experience as it eliminates a lot of steps and creates a Virtual Machine called XEPA that looks very similar to the physical host as it shares the same SMBIOS information and has the necessary PCI devices attached such as local storage and the management network interface (eth0).
+The automated option provides the best experience as it eliminates a lot of steps and creates a Virtual Machine called XEPA that looks very similar to the physical host as it shares the same SMBIOS information and has the necessary PCI devices attached such as local storage and the management network interface (eth0). This means that the VM will be using the host's actual management Layer 3 Public IPv4 network for connectivity.
 
 However, an API key is required which you can generate by following the instructions [here](https://deploy.equinix.com/developers/docs/metal/identity-access-management/api-keys/). Once you have your API key ready, you can run the following command to run the setup script:
 
@@ -197,6 +197,8 @@ A new window will appear to locate the ISO file. Go to the Downloads folder or a
 Once your ISO is added to the VM SATA CDROM, you can start up the VM by clicking on the the left corner monitor icon to show the graphical video console and click on the play icon to power on the virtual machine.
 
 ![virt-manager-start-xepa-vm](/images/virt-manager-start-xepa-vm.png)
+
+The VM should start booting from the ISO image and you can proceed with the rest of the [Operating System installation](#install-the-operating-system).
 
 #### Manual Instructions
 
@@ -462,7 +464,19 @@ Once the server has rebooted succesfully, you should be able to access it via RD
 
 ![windows-rdp-session](/images/windows-rdp-session.png)
 
-In many cases the operating system will automatically configure the network through DHCP for the first network interface only. It's recommended to configure LACP bonding for the server's network interfaces if the operating system supports it. If you need to configure the network interfaces statically, the management subnet information can be found in the Equinix Metal portal instance overview page and for DNS servers you can use the following:
+NOTE:
+
+In many cases the operating system will automatically configure the network through DHCP for the first network interface only. It's recommended to configure a link aggregation group (LAG) with LACP (802.3ad) bonding for the server's network interfaces to achieve network redundancy if the operating system supports it. Otherwise you will experience downtime during network maintenance events performed by Equinix.
+
+These are the recommended LAG LACP settings:
+
+```
+Mode: Active - Active
+Timeout:  Fast
+Hash policy:  Layer 3+4
+```
+
+If you need to configure the network interfaces statically, the management subnet information can be found in the Equinix Metal portal instance overview page and for DNS servers you can use the following provided by Equinix Metal or any others that you may prefer:
 
 ```
 Primary   DNS Server: 147.75.207.207
