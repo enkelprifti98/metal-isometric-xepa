@@ -487,7 +487,7 @@ In many cases the operating system will automatically configure the network thro
 These are the recommended LAG LACP settings:
 
 ```
-Mode: Active - Active
+Mode:  Active - Active
 Timeout:  Fast
 Hash policy:  Layer 3+4
 ```
@@ -495,8 +495,8 @@ Hash policy:  Layer 3+4
 If you need to configure the network interfaces statically, the management subnet information can be found in the Equinix Metal portal instance overview page and for DNS servers you can use the following provided by Equinix Metal or any others that you may prefer:
 
 ```
-Primary   DNS Server: 147.75.207.207
-Secondary DNS Server: 147.75.207.208
+Primary   DNS Server:  147.75.207.207
+Secondary DNS Server:  147.75.207.208
 ```
 
 At this point you're all set!
