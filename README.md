@@ -418,7 +418,13 @@ comconsole_port=0x2F8
 
 Restart the virtual machine after you have configured the serial console settings inside the operating system for them to take effect.
 
-To confirm that you have configured serial console output properly inside the operating system, you can open the terminal shell and run the following command:
+To confirm that you have configured serial console output properly inside the operating system, you can open the terminal shell and run the following command if you followed the automated instructions:
+
+```
+virsh console xepa serial1
+```
+
+where `xepa` is the name of the xepa virtual machine. If you created the vm by following the manual instructions, you can run the following command instead:
 
 ```
 virsh console win10 serial1
