@@ -25,7 +25,7 @@ if [[ "$*" == *"--restart"* ]]; then
     pkill -f "/usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset"
     nohup /usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset > /dev/null 2>&1 &
 
-    xfce4-session-logout --halt
+    #xfce4-session-logout --halt
     pkill -f "/usr/bin/dbus-launch --sh-syntax --exit-with-session xfce4-session"
     nohup startxfce4 > /dev/null 2>&1 &
 
