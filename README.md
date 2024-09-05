@@ -92,7 +92,9 @@ You will notice that the Operating System now says `Alpine 3` as that is the Res
 
 While the instance is transitioning to Rescue Mode, you can monitor the node through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos) if you wish.
 
-To access the Rescue Mode environment, you can either use the Out-of-Band console or [SSH](https://metal.equinix.com/developers/docs/accounts/ssh-keys/#connecting-with-ssh) into it through the management IP address. The Rescue Mode environment should look like the following:
+To access the Rescue Mode environment, you can either use the Out-of-Band console or [SSH](https://metal.equinix.com/developers/docs/accounts/ssh-keys/#connecting-with-ssh) into it through the management IP address. It's recommended to use the Out-of-Band console. Once the server gets to the Rescue OS login prompt, type `root` and press `Enter` to log in.
+
+The Rescue Mode environment should look like the following:
 
 ![rescue-mode](/images/rescue-mode.png)
 
