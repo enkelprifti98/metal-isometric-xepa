@@ -196,7 +196,7 @@ A new window will appear to locate the ISO file. Go to the Downloads folder or a
 
 ![select-iso-file](/images/select-iso-file.png)
 
-Once your ISO is added to the VM SATA CDROM, you can start up the VM by clicking on the the left corner monitor icon to show the graphical video console and click on the play icon to power on the virtual machine.
+Once your ISO is added to the VM SATA CDROM, you can start up the VM by clicking on the the left corner monitor icon to show the graphical video console and click on the play icon to power on the virtual machine. It may take a few seconds for the VM to power on.
 
 ![virt-manager-start-xepa-vm](/images/virt-manager-start-xepa-vm.png)
 
