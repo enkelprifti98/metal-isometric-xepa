@@ -458,6 +458,8 @@ Shut down the virtual machine and close all running applications. Then disconnec
 
 You can now reboot to the host by going to the server's Out-of-Band console and type `reboot`, then press `Enter`.
 
+NOTE: Do not use the reboot function on the Equinix Metal portal as it sends a hard reset instead of a graceful shutfown signal so the automated cleanup process that runs during Rescue OS shutdown will not work.
+
 <!---
 Rebooting via the portal sends a hard reset instead of a graceful shutfown signal so the automated cleanup process will not work.
 
