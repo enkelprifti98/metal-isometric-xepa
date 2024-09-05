@@ -102,17 +102,19 @@ The Rescue Mode environment should look like the following:
 
 We need to install several packages to make the Rescue Mode environment ready for installing an ISO to the server. There are two options for this, automated (recommended) and manual.
 
-#### Automated (recommended)
+#### Automated (recommended) (API key required)
 
 The automated option provides the best experience as it eliminates a lot of steps and creates a Virtual Machine called XEPA that looks very similar to the physical host as it shares the same SMBIOS information and has the necessary PCI devices attached such as local storage and the management network interface (eth0).
+
+However, an API key is required which you can generate by following the instructions [here](https://deploy.equinix.com/developers/docs/metal/identity-access-management/api-keys/). Once you have your API key ready, you can run the following command to run the setup script:
 
 ```
 wget -q -O setup-v2.sh https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup-v2.sh && chmod +x setup-v2.sh && ./setup-v2.sh
 ```
 
-#### Manual
+#### Manual (no API key required)
 
-To do so, run the following command to run the setup script:
+The manual option does not require an API key and is useful for legacy systems that don't support IOMMU / PCI passthrough but it takes more steps. You can run the following command to run the setup script:
 
 ```
 curl -s https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup.sh | sh
@@ -175,6 +177,22 @@ Once you have the ISO ready, you need to create a Virtual Machine so that you ca
 Launch the Virtual Machine Manager by clicking the search icon on the dock at the bottom of the screen, then type `virtual machine manager` in the search field which should show the Virtual Machine Manager application as a search result. Double click on the application to start it.
 
 ![launch-virt-manager](/images/launch-virt-manager.png)
+
+#### Automated Instructions
+
+The Virtual Machine Manager application will look like the following image where you will notice there is a Virtual Machine called `xepa`. Open the xepa VM by double clicking on it, then click on the upper left `i` icon to show virtual hardware details.
+
+![virt-manager-open-xepa-vm](/images/virt-manager-open-xepa-vm.png)
+
+On the left sidebar of the virtual hardware details page click on `SATA CDROM 1`, then click `Browse` on the right side. On the new window click `Browse Local` and locate your ISO file.
+
+![virt-manager-xepa-vm-add-iso](/images/virt-manager-xepa-vm-add-iso.png)
+
+Once your ISO is added to the VM SATA CDROM, you can start up the VM by clicking on the the left corner monitor icon to show the graphical video console and click on the play icon to power on the virtual machine.
+
+![virt-manager-xepa-start-vm](/images/virt-manager-xepa-start-vm.png)
+
+#### Manual Instructions
 
 The Virtual Machine Manager application will look like the following image. Start the process of creating a Virtual Machine by clicking the monitor icon at the top left corner of the Virtual Machine Manager window.
 
