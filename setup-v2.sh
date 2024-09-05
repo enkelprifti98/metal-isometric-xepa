@@ -22,20 +22,30 @@ if [[ "$*" == *"--restart"* ]]; then
     export DISPLAY=:99
     export RESOLUTION=1920x1080x24
 
-    pkill -f "/usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset"
+    while pkill -f "/usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset"; do
+        sleep 1
+    done
     nohup /usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset > /dev/null 2>&1 &
 
     #xfce4-session-logout --halt
-    pkill -f "/usr/bin/dbus-launch --sh-syntax --exit-with-session xfce4-session"
+    while pkill -f "/usr/bin/dbus-launch --sh-syntax --exit-with-session xfce4-session"; do
+        sleep 1
+    done
     nohup startxfce4 > /dev/null 2>&1 &
 
-    pkill -f "x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900"
+    while pkill -f "x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900"; do
+        sleep 1
+    done
     nohup x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900 > /dev/null 2>&1 &
 
-    pkill -f "bash /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80"
+    while pkill -f "bash /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80"; do
+        sleep 1
+    done
     nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null 2>&1 &
 
-    pkill -f "filebrowser -r /root -a 0.0.0.0 -p 8080"
+    while pkill -f "filebrowser -r /root -a 0.0.0.0 -p 8080"; do
+        sleep 1
+    done
     nohup filebrowser -r /root -a 0.0.0.0 -p 8080 > /dev/null 2>&1 &
 
     echo "Done."
