@@ -40,6 +40,8 @@ Profit???
   - [Download the ISO](#download-the-iso)
   - [Upload the ISO](#upload-the-iso)
 - [Create the ISO installation Virtual Machine](#create-the-iso-installation-virtual-machine)
+  - [Automated Instructions](#automated-instructions)
+  - [Manual Instructions](#manual-instructions)
 - [Set Virtual Machine boot firmware](#set-virtual-machine-boot-firmware)
 - [Add serial consoles to the Virtual Machine](#add-serial-consoles-to-the-virtual-machine)
 - [Add a TPM to the Virtual Machine](#add-a-tpm-to-the-virtual-machine)
