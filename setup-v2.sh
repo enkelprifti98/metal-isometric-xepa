@@ -57,6 +57,7 @@ sed -i '/edge/d' /etc/apk/repositories
 apk add --no-cache ca-certificates bash curl jq openssl sudo xvfb x11vnc xfce4 xfce4-terminal faenza-icon-theme bash procps nano git pciutils lshw gparted gzip p7zip cpio tar unzip xarchiver ethtool mokutil gtk+3.0-dev \
 --update
 
+rc-service dbus start
 
 #Xfce usually stores its configuration files in ~/.config/xfce4 (as well as ~/.local/share/xfce4 and ~/.config/Thunar).
 #Keyboard shortcuts are stored in ~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.xml.
