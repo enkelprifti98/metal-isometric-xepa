@@ -188,6 +188,7 @@ sed -i "s/UI.initSetting('resize', 'off');/UI.initSetting('resize', 'scale');/" 
 
 nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null 2>&1 &
 
+
 # Install File Browser (https://filebrowser.org/)
 # Default login is:
 # Username: admin
@@ -195,15 +196,18 @@ nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null
 
 curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
-ETH0_PUBLIC_IPV4=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
-ETH0_PUBLIC_IPV4_NETMASK=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
-ETH0_PUBLIC_IPV4_GATEWAY=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
+# setting -a address to 0.0.0.0 lets filebrowser listen to all host IPs
 
-#nohup filebrowser -r /root -a $ETH0_PUBLIC_IPV4 -p 8080 > /dev/null 2>&1 &
+nohup filebrowser -r /root -a 0.0.0.0 -p 8080 > /dev/null 2>&1 &
 
 mkdir /root/Downloads
 
 clear
+
+
+ETH0_PUBLIC_IPV4=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
+ETH0_PUBLIC_IPV4_NETMASK=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
+ETH0_PUBLIC_IPV4_GATEWAY=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
 
 INSTANCE_ID=$(echo $METADATA | jq -r .id)
 METRO=$(echo $METADATA | jq -r .metro)
@@ -869,8 +873,6 @@ ifup $ETH0_IF_NAME
 ifdown $ETH0_IF_NAME
 
 #ip link set $ETH0_IF_NAME down
-
-nohup filebrowser -r /root -a $SERVER_IP -p 8080 > /dev/null 2>&1 &
 
 
 cat > /root/cleanup.sh <<EOF
