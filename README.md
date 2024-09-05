@@ -98,7 +98,19 @@ To access the Rescue Mode environment, you can either use the Out-of-Band consol
 
 ### Run the ISO installation environment setup script
 
-We need to install several packages to make the Rescue Mode environment ready for installing an ISO to the server. To do so, run the following command to run the setup script:
+We need to install several packages to make the Rescue Mode environment ready for installing an ISO to the server. There are two options for this, automated (recommended) and manual.
+
+#### Automated (recommended)
+
+The automated option provides the best experience as it eliminates a lot of steps and creates a Virtual Machine called XEPA that looks very similar to the physical host as it shares the same SMBIOS information and has the necessary PCI devices attached such as local storage and the management network interface (eth0).
+
+```
+wget -q -O setup-v2.sh https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup-v2.sh && chmod +x setup-v2.sh && ./setup-v2.sh
+```
+
+#### Manual
+
+To do so, run the following command to run the setup script:
 
 ```
 curl -s https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup.sh | sh
