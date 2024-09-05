@@ -27,7 +27,7 @@ if [[ "$*" == *"--restart"* ]]; then
     done
     nohup /usr/bin/Xvfb $DISPLAY -screen 0 $RESOLUTION -ac +extension GLX +render -noreset > /dev/null 2>&1 &
 
-    xfce4-session-logout --halt
+    #xfce4-session-logout --halt
     while pkill -f "/usr/bin/dbus-launch --sh-syntax --exit-with-session xfce4-session"; do
         sleep 1
     done
