@@ -184,13 +184,19 @@ The Virtual Machine Manager application will look like the following image where
 
 ![virt-manager-open-xepa-vm](/images/virt-manager-open-xepa-vm.png)
 
-On the left sidebar of the virtual hardware details page click on `SATA CDROM 1`, then click `Browse` on the right side. On the new window click `Browse Local` and locate your ISO file.
+On the left sidebar of the virtual hardware details page click on `SATA CDROM 1`, then click `Browse` on the right side. On the new window click `Browse Local` to locate your ISO file.
 
 ![virt-manager-xepa-vm-add-iso](/images/virt-manager-xepa-vm-add-iso.png)
 
+A new window will appear to locate the ISO file. Go to the Downloads folder or anywhere else that your ISO file might be located in and select it as the ISO media.
+
+![find-downloads-folder](/images/find-downloads-folder.png)
+
+![select-iso-file](/images/select-iso-file.png)
+
 Once your ISO is added to the VM SATA CDROM, you can start up the VM by clicking on the the left corner monitor icon to show the graphical video console and click on the play icon to power on the virtual machine.
 
-![virt-manager-xepa-start-vm](/images/virt-manager-xepa-start-vm.png)
+![virt-manager-start-xepa-vm](/images/virt-manager-start-xepa-vm.png)
 
 #### Manual Instructions
 
