@@ -3,6 +3,43 @@
 # Run from Out-of-Band console
 # wget -q -O setup-v2.sh https://raw.githubusercontent.com/enkelprifti98/metal-isometric-xepa/main/setup-v2.sh && chmod +x setup-v2.sh && ./setup-v2.sh
 
+#echo $1  (first argument)
+#echo $2  (second argument)
+#echo $*  ($* is a single string, whereas $@ is an actual array)
+#echo $@
+
+if [[ "$*" == *"--restart"* ]]; then
+    #echo "argument exists"
+
+    echo "Restarting XEPA services..."
+
+    rc-service dbus stop
+    rc-service dbus start
+
+    rc-service libvirtd stop
+    rc-service libvirtd start
+
+    export DISPLAY=:99
+    export RESOLUTION=1920x1080x24
+
+    nohup /usr/bin/Xvfb :99 -screen 0 $RESOLUTION -ac +extension GLX +render -noreset > /dev/null 2>&1 &
+
+    xfce4-session-logout --halt
+    nohup startxfce4 > /dev/null 2>&1 &
+
+    nohup x11vnc -xkb -noxrecord -noxfixes -noxdamage -display $DISPLAY -forever -bg -rfbauth /root/.vnc/passwd -users root -rfbport 5900 > /dev/null 2>&1 &
+
+    nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null 2>&1 &
+    nohup filebrowser -r /root -a 0.0.0.0 -p 8080 > /dev/null 2>&1 &
+
+    echo "Done."
+
+    exit
+
+#else
+    #echo "argument doesn't exist"
+fi
+
 echo
 echo "XEPA ISO INSTALLATION ENVIRONMENT"
 echo
