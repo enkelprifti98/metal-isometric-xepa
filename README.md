@@ -343,7 +343,7 @@ A new window will appear with a video console of the Virtual Machine which shoul
 
 ![virt-manager-maximize-window](/images/virt-manager-maximize-window.png)
 
-At this point you can proceed with the installation process and you will notice that the local server disk we allocated earlier will appear as an installation target option.
+At this point you can proceed with the installation process and you will notice that the local server disk we allocated earlier will appear as an installation target option. If you don't see your storage drives as an option, it could mean that the Operating System image does not support the storage controller.
 
 ![windows-installation-storage-selection](/images/windows-installation-storage-selection.png)
 
@@ -450,13 +450,19 @@ Once we have completed the post installation steps, we can reboot over to the ph
 
 Shut down the virtual machine and close all running applications. Then disconnect from the VNC console or close the web browser window.
 
+You can now reboot to the host by going to the server's Out-of-Band console and type `reboot`, then press `Enter`.
+
+<!---
+Rebooting via the portal sends a hard reset instead of a graceful shutfown signal so the automated cleanup process will not work.
+
 Go to the Equinix Metal console server overview page, click the `Server Actions` button and select the `Reboot` action.
 
 ![post-install-reboot-server](/images/post-install-reboot-server.png)
 
 While the server is rebooting, you can monitor its progress through the [Out-of-Band console](https://metal.equinix.com/developers/docs/resilience-recovery/serial-over-ssh/#using-sos).
+-->
 
-You will notice the server will be trying to PXE boot over the network initially and loop through each network interface but it should eventually get to the OS boot drive. If it doesn't find the OS boot drive, it means that either the VM firmware did not match with the server (BIOS vs UEFI) or the OS was installed on an NVMe drive in a BIOS server which do not support booting an OS from NVMe drives, only UEFI servers can support NVMe drives as boot targets.
+You will notice the server will be trying to PXE boot over the network initially and loop through each network interface but it should eventually get to the OS boot drive. You can usually press `Escape` on your keyboard to cancel the PXE boot process. If it doesn't find the OS boot drive, it means that either the VM firmware did not match with the server (BIOS vs UEFI) or the OS was installed on an NVMe drive in a BIOS server which do not support booting an OS from NVMe drives, only UEFI servers can support NVMe drives as boot targets.
 
 If there are any kernel panics during the OS boot process, it may potentially mean that your hardware is not supported by the kernel.
 
