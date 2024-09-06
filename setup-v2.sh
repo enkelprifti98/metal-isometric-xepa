@@ -1011,7 +1011,7 @@ ifdown \$MANAGEMENT_IF_NAME
 # Check for internet connectivity
 wget -q --spider http://google.com
 
-if [ $? -ne 0 ]; then
+if [ \$? -ne 0 ]; then
     echo
     echo "Server has no internet connectivity, exiting script... try again."
     echo "This could be due to the management eth0 interface still being attached to a virtual machine.
