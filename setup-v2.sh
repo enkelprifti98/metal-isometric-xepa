@@ -477,6 +477,9 @@ while [ $WORD_COUNT -gt 1 ] && [ $PCI_ID_FOUND == "false" ]; do
     fi
 done
 
+# Only add NVMe PCI devices if the server is in UEFI boot mode as NVMe can only be used as bootable drives in UEFI mode. Legacy BIOS does not support NVMe devices as bootable drives.
+if [ -d /sys/firmware/efi ]; then
+
 PCI_EXISTS_IN_LIST="false"
 
 for PCI in $STORAGE_PCI_LIST
@@ -497,6 +500,8 @@ if [ "$PCI_EXISTS_IN_LIST" == "false" ]; then
        # echo "PCI list is not empty"
        STORAGE_PCI_LIST=$STORAGE_PCI_LIST$'\n'$PCI_ID
     fi
+
+fi
 
 fi
 
@@ -706,12 +711,21 @@ if [ "$IOMMU_STATE" == "disabled" ]; then
 
     NUM=0
 
-    for LINE in $(ls -l /sys/block/ | grep -e "sd" -e "nvme" | awk '{print $9}')
+    for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9}')
     do
         NUM=$(( NUM + 1 ))
         VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH=$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH$'--disk '/dev/$LINE,boot.order=$NUM$' '
         
     done
+
+    # Only add NVMe devices if the server is in UEFI boot mode as NVMe can only be used as bootable drives in UEFI mode. Legacy BIOS does not support NVMe devices as bootable drives.
+    if [ -d /sys/firmware/efi ]; then
+        for LINE in $(ls -l /sys/block/ | grep "nvme" | awk '{print $9}')
+        do
+            NUM=$(( NUM + 1 ))
+            VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH=$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH$'--disk '/dev/$LINE,boot.order=$NUM$' '
+        done
+    fi
 
     NUM=$(( NUM + 1 ))
     
