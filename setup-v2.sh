@@ -980,13 +980,44 @@ VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
 NETWORK_PORT_ID=$NETWORK_PORT_ID
 
+# Graceful shutdown command for xepa VM
 virsh shutdown xepa
+
+# Wait 20 seconds for the xepa VM to gracefully shut down
+echo "Waiting 20 seconds for the xepa VM to shut down gracefully"
+XEPA_VM_STATE=$(virsh domstate xepa)
+SECONDS=1
+while [ "$XEPA_VM_STATE" == "running" ] && [ $SECONDS -lt 21 ]; do
+    sleep 1
+    XEPA_VM_STATE=$(virsh domstate xepa)
+    echo "XEPA VM State: $XEPA_VM_STATE"
+    SECONDS=$(( SECONDS + 1 ))
+done
+
+if [ "$XEPA_VM_STATE" == "running" ]; then
+    # echo "true still running"
+    # forcefully stop the xepa VM if it's not gracefully shutting down
+    echo "XEPA VM seems stuck... forcefully shutting it down...
+    virsh destroy xepa
+fi
+
 virsh undefine xepa
 
 ifup \$ETH0_IF_NAME
 ip route del default
 ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
 ifdown \$MANAGEMENT_IF_NAME
+
+# Check for internet connectivity
+wget -q --spider http://google.com
+
+if [ $? -ne 0 ]; then
+    echo
+    echo "Server has no internet connectivity, exiting script... try again."
+    echo "This could be due to the management eth0 interface still being attached to a virtual machine.
+    echo
+    exit
+fi
 
         echo "Detaching XEPA-MANAGEMENT VLAN from the server..."
         sleep 1
