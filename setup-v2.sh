@@ -615,6 +615,8 @@ do
 # There's no need to add network devices to the boot order unless you need it for troubleshooting
 #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
   VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
+
+  VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER=$'--network network=default,model.type=e1000e,mac.address=$ETH0_METADATA_MAC,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION '
   
 done
 
@@ -639,7 +641,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # It works by evaluating the content of the string as shell code
 # eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
-VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --nonetworks --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
+VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
 
 # Useful virt-install options
 # --os-variant detect=off \
@@ -689,14 +691,27 @@ fi
 printf "\n"
 
 if [ "$IOMMU_STATE" == "enabled" ]; then
+    VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--nonetworks '
     echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
     eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 fi
 
 if [ "$IOMMU_STATE" == "disabled" ]; then
+
+    NUM=0
+
+    for LINE in $(ls -l /sys/block/ | grep -e "sd" -e "nvme" | awk '{print $9}')
+    do
+        NUM=$(( NUM + 1 ))
+        VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH=$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH$'--disk /dev/$LINE,boot.order=$NUM '
+        
+    done
+
+    NUM=$(( NUM + 1 ))
+    
     # Don't add PCI devices as it's not supported when IOMMU is disabled
-    echo "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
-    eval "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=1"
+    echo "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=$NUM"
+    eval "$VIRT_INSTALL_PARAMS--disk device=cdrom,bus=sata,boot.order=$NUM"
 fi
 
 
