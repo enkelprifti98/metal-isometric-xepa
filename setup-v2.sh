@@ -265,6 +265,7 @@ ETH0_PUBLIC_IPV4_GATEWAY=$(echo $METADATA | jq -r ".network.addresses[] | select
 
 INSTANCE_ID=$(echo $METADATA | jq -r .id)
 METRO=$(echo $METADATA | jq -r .metro)
+PLAN=$(echo $METADATA | jq -r .plan)
 API_METADATA=$(curl -s -X GET -H "X-Auth-Token: $AUTH_TOKEN" "https://api.packet.net/devices/$INSTANCE_ID?include=project_lite")
 PROJECT_UUID=$(echo $API_METADATA | jq -r .project_lite.id)
 
@@ -689,6 +690,11 @@ else
 fi
 
 printf "\n"
+
+# The c3.small.x86 has IOMMU enabled but it doesn't properly support PCI passthrough so we're falling back to the disabled state
+if [ "$PLAN" == "c3.small.x86" ]; then
+    IOMMU_STATE="disabled"
+fi
 
 if [ "$IOMMU_STATE" == "enabled" ]; then
     VIRT_INSTALL_PARAMS=$VIRT_INSTALL_PARAMS$'--nonetworks '
