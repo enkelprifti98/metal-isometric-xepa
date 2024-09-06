@@ -190,7 +190,7 @@ On the left sidebar of the virtual hardware details page click on `SATA CDROM 1`
 
 ![virt-manager-xepa-vm-add-iso](/images/virt-manager-xepa-vm-add-iso.png)
 
-A new window will appear to locate the ISO file. Go to the Downloads folder or anywhere else that your ISO file might be located in and select it as the ISO media.
+A new window will appear to locate the ISO file. Go to the Downloads folder or anywhere else that your ISO file might be located in and select it as the ISO media by double clicking the ISO file or click the `Open` button. Then click `Apply` to save the ISO media to the SATA CDROM.
 
 ![find-downloads-folder](/images/find-downloads-folder.png)
 
