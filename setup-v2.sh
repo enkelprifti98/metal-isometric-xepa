@@ -709,7 +709,7 @@ if [ "$IOMMU_STATE" == "disabled" ]; then
     for LINE in $(ls -l /sys/block/ | grep -e "sd" -e "nvme" | awk '{print $9}')
     do
         NUM=$(( NUM + 1 ))
-        VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH=$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH--disk /dev/$LINE,boot.order=$NUM$' '
+        VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH=$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH$'--disk '/dev/$LINE,boot.order=$NUM$' '
         
     done
 
@@ -965,6 +965,9 @@ ETH0_PUBLIC_IPV4_GATEWAY=$ETH0_PUBLIC_IPV4_GATEWAY
 VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
 NETWORK_PORT_ID=$NETWORK_PORT_ID
+
+virsh shutdown xepa
+virsh undefine xepa
 
 ifup \$ETH0_IF_NAME
 ip route del default
