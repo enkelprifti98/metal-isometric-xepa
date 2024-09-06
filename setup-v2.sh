@@ -1009,6 +1009,19 @@ fi
 
 virsh undefine xepa
 
+SECONDS=1
+while [ -n "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ] && [ \$SECONDS -lt 21 ]; do
+    echo "waiting for the primary management interface \$ETH0_IF_NAME to be available on the host.."
+    sleep 2
+    SECONDS=\$(( SECONDS + 2 ))
+done
+
+if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]; then
+    echo "the primary management interface \$ETH0_IF_NAME isn't available and it is required to proceed with the cleanup process"
+    echo "exiting script..."
+    exit
+fi
+
 ifup \$ETH0_IF_NAME
 ip route del default
 ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
