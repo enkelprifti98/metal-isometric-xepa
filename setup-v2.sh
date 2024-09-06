@@ -997,7 +997,7 @@ done
 if [ "\$XEPA_VM_STATE" == "running" ]; then
     # echo "true still running"
     # forcefully stop the xepa VM if it's not gracefully shutting down
-    echo "XEPA VM seems stuck... forcefully shutting it down...
+    echo "XEPA VM seems stuck... forcefully shutting it down..."
     virsh destroy xepa
 fi
 
