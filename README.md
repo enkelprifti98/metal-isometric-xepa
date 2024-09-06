@@ -515,7 +515,9 @@ Once you're back in the rescue GUI environment, launch the Virtual Machine Manag
 
 ![launch-virt-manager](/images/launch-virt-manager.png)
 
-Start the process of creating a Virtual Machine by clicking the monitor icon at the top left corner of the Virtual Machine Manager window.
+If you followed the automated intrusctions, you can just open the xepa virtual machine and power it on by clicking on the play icon.
+
+If you followed the manual instructions, you can start the process of creating a Virtual Machine by clicking the monitor icon at the top left corner of the Virtual Machine Manager window.
 
 ![virt-manager](/images/virt-manager.png)
 
