@@ -980,21 +980,27 @@ VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
 NETWORK_PORT_ID=$NETWORK_PORT_ID
 
-# Graceful shutdown command for xepa VM
-virsh shutdown xepa
-
-# Wait 20 seconds for the xepa VM to gracefully shut down
-echo "Waiting 20 seconds for the xepa VM to shut down gracefully"
 XEPA_VM_STATE=\$(virsh domstate xepa)
-SECONDS=1
-while [ "\$XEPA_VM_STATE" == "running" ] && [ \$SECONDS -lt 21 ]; do
-    sleep 1
-    XEPA_VM_STATE=\$(virsh domstate xepa)
-    echo "XEPA VM State: \$XEPA_VM_STATE"
-    SECONDS=\$(( SECONDS + 1 ))
-done
 
-if [ "\$XEPA_VM_STATE" == "running" ]; then
+# if [ "\$XEPA_VM_STATE" == "running" ]; then
+
+if [ "\$XEPA_VM_STATE" != "shut off" ]; then
+    # Graceful shutdown command for xepa VM
+    virsh shutdown xepa
+
+    # Wait 20 seconds for the xepa VM to gracefully shut down
+    echo "Waiting 20 seconds for the xepa VM to shut down gracefully"
+    XEPA_VM_STATE=\$(virsh domstate xepa)
+    SECONDS=1
+    while [ "\$XEPA_VM_STATE" != "shut off" ] && [ \$SECONDS -lt 21 ]; do
+        sleep 1
+        XEPA_VM_STATE=\$(virsh domstate xepa)
+        echo "XEPA VM State: \$XEPA_VM_STATE"
+        SECONDS=\$(( SECONDS + 1 ))
+    done
+fi
+
+if [ "\$XEPA_VM_STATE" != "shut off" ]; then
     # echo "true still running"
     # forcefully stop the xepa VM if it's not gracefully shutting down
     echo "XEPA VM seems stuck... forcefully shutting it down..."
