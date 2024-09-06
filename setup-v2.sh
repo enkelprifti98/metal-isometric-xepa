@@ -716,6 +716,7 @@ if [ "$IOMMU_STATE" == "disabled" ]; then
     NUM=$(( NUM + 1 ))
     
     # Don't add PCI devices as it's not supported when IOMMU is disabled
+    # Use virtual network adapter and storage disks instead
     echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH--disk device=cdrom,bus=sata,boot.order=$NUM"
     eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH--disk device=cdrom,bus=sata,boot.order=$NUM"
 fi
