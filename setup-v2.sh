@@ -1024,6 +1024,8 @@ if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]
     exit
 fi
 
+sleep 5
+
 ifup \$ETH0_IF_NAME
 ip route del default
 ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
