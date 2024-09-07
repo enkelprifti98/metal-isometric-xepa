@@ -198,6 +198,9 @@ apk add swtpm libtpms --update
 
 rc-service libvirtd start
 
+# Sometimes the virtlogd service doesn't get started automatically which causes the error "failed to connect socket to '/var/run/libvirt/virtlogd-sock'" to happen when starting a VM so we're starting the service manually
+rc-service virtlogd start
+
 # Install web-browser (Firefox works, Chromium seems to throw an I/O error and doesn't launch)
 
 apk add firefox-esr \
