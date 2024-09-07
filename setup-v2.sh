@@ -1016,6 +1016,8 @@ while [ -n "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")
     SECONDS=\$(( SECONDS + 2 ))
 done
 
+echo
+
 if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]; then
     echo "the primary management interface \$ETH0_IF_NAME isn't available and it is required to proceed with the cleanup process"
     echo "exiting script..."
@@ -1037,6 +1039,12 @@ if [ \$? -ne 0 ]; then
     echo
     exit
 fi
+
+# novnc needs to be reloaded as it seems like the network changes break it
+while pkill -f "bash /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80"; do
+    sleep 1
+done
+nohup /root/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 80 > /dev/null 2>&1 &
 
         echo "Detaching XEPA-MANAGEMENT VLAN from the server..."
         sleep 1
