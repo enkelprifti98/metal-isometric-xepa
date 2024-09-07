@@ -1012,8 +1012,8 @@ virsh undefine xepa
 SECONDS=1
 while [ -n "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ] && [ \$SECONDS -lt 21 ]; do
     echo "waiting for the primary management interface \$ETH0_IF_NAME to be available on the host.."
-    sleep 2
-    SECONDS=\$(( SECONDS + 2 ))
+    sleep 5
+    SECONDS=\$(( SECONDS + 5 ))
 done
 
 echo
