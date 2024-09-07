@@ -1025,7 +1025,7 @@ if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]
 fi
 
 echo "waiting for the primary management interface \$ETH0_IF_NAME to be available on the host..."
-sleep 10
+sleep 15
 
 ifdown \$ETH0_IF_NAME
 ifup \$ETH0_IF_NAME
