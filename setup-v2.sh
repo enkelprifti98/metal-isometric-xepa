@@ -1024,7 +1024,7 @@ if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]
     exit
 fi
 
-sleep 5
+sleep 10
 
 ifdown \$ETH0_IF_NAME
 ifup \$ETH0_IF_NAME
