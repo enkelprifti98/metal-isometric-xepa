@@ -993,10 +993,10 @@ if [ "\$XEPA_VM_STATE" != "shut off" ]; then
     XEPA_VM_STATE=\$(virsh domstate xepa)
     SECONDS=1
     while [ "\$XEPA_VM_STATE" != "shut off" ] && [ \$SECONDS -lt 21 ]; do
-        sleep 1
+        sleep 2
         XEPA_VM_STATE=\$(virsh domstate xepa)
         echo "XEPA VM State: \$XEPA_VM_STATE"
-        SECONDS=\$(( SECONDS + 1 ))
+        SECONDS=\$(( SECONDS + 2 ))
     done
 fi
 
