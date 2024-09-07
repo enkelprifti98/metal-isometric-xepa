@@ -416,6 +416,8 @@ console="comconsole,vidconsole"
 comconsole_port=0x2F8
 ```
 
+In some cases the settings you set in `/boot/loader.conf` file can get changed/overwritten by the OS so it might be better to use `/boot/loader.conf.local` instead. The file might not exist by default so you can just create it.
+
 Restart the virtual machine after you have configured the serial console settings inside the operating system for them to take effect.
 
 To confirm that you have configured serial console output properly inside the operating system, you can open the terminal shell and run the following command if you followed the automated instructions:
