@@ -76,7 +76,7 @@ http://boot.netboot.xyz
 
 At the Optional Settings section, there will be an option to configure IPs. If you leave the toggle unchecked, the instance will be deployed with a /31 public IPv4 subnet, /31 private IPv4 subnet, and a /127 public IPv6 subnet.
 
-**For many operating systems a /31 subnet size will work fine but there are cases where a /30 subnet is required at minimum such as for Microsoft Windows or VMware ESXi. If that is the case, you will need to [request a /30 Elastic IP subnet](https://metal.equinix.com/developers/docs/networking/reserve-public-ipv4s/#requesting-public-ipv4-addresses) and then use that subnet as the [instance management subnet](https://metal.equinix.com/developers/docs/networking/reserve-public-ipv4s/#provisioning-with-a-reserved-public-ipv4-subnet).**
+**For many operating systems a /31 subnet size will work fine but there are cases where a /30 subnet is required at minimum such as for Microsoft Windows, VMware ESXi, TrueNAS, and pfSense. If that is the case, you will need to [request a /30 Elastic IP subnet](https://deploy.equinix.com/developers/docs/metal/networking/reserve-public-ipv4s/#requesting-public-ipv4-addresses) and then use that subnet as the [instance management subnet](https://deploy.equinix.com/developers/docs/metal/networking/reserve-public-ipv4s/#provisioning-with-a-reserved-public-ipv4-subnet).**
 
 For this guide I will be installing Windows 10 so I will be using a /30 Elastic IP subnet for the instance management subnet. Here is what it would look like:
 
