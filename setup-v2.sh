@@ -627,6 +627,8 @@ do
 #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
   VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
 
+  # This qemu command shows a list of available devices that can be emulated
+  # /usr/bin/qemu-system-x86_64 -device ?
   VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER=$'--network 'network=default,model.type=e1000e,mac.address=$ETH0_METADATA_MAC,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
   
 done
