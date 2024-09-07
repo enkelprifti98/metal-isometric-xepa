@@ -139,6 +139,8 @@ auto lo
 iface lo inet loopback
 EOF
 
+ifup lo
+
 # Fallback to cgroup v1 by unmounting cgroup v2 since the Rescue OS Alpine Linux build has v2 enabled by default.
 # Without unmounting cgroup v2, qemu will throw an error when starting a VM.
 
