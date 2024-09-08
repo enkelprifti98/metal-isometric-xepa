@@ -645,7 +645,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # For newer linux distributions you might see network interface names like the following:
 # eno: Names containing the index numbers provided by firmware/BIOS for on-board devices, example: eno1 (eno = Onboard).
 # ens: Names containing the PCI Express hotplug slot numbers provided by the firmware/BIOS, example: ens1 (ens = Slot).
-# enp: Names containing the physical/geographical location of the hardware's port, example: enp2s0 (enp = Position).
+# enp: Names containing the physical/geographical location of the hardware's port, example 1: enp2s0 (enp = Position)  example 2: enp2s0f0np0 (enp2 = position, s0 = pci slot 0, f0 = function 0 and it only appears if the device is multifunction capable, np0 = network port number 0 and it could also be network port name as well which seems to be defined by the NIC driver) 
 # enx: Names containing the MAC address of the interface (example: enx78e7d1ea46da).
 # eth: Classic unpredictable kernel-native ethX naming (example: eth0).
 
