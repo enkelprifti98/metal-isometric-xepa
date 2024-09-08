@@ -343,6 +343,7 @@ if [ "$METADATA_MAC" == "$LOCAL_MAC" ] && [ -f "/sys/class/net/$LINE/device/ueve
     # Add only the eth0 interface / NIC to the XEPA ISO VM
 
     if [ "$ETH0_METADATA_MAC" == "$LOCAL_MAC" ]; then
+        ETH0_PCI_ID=$PCI_ID
         if [[ -z "$NETWORK_PCI_LIST" ]]; then
            # $NETWORK_PCI_LIST is empty, do what you want
            # echo "PCI list is empty"
@@ -623,13 +624,33 @@ do
 #  done
 
   
-# There's no need to add network devices to the boot order unless you need it for troubleshooting
-#  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
+  # There's no need to add network devices to the boot order unless you need it for troubleshooting
+  #  VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES--host-device=$LINE$',boot.order='$NUM$' '
   VIRT_INSTALL_PCI_DEVICES=$VIRT_INSTALL_PCI_DEVICES$'--host-device='$LINE,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
+
 
   # This qemu command shows a list of available devices that can be emulated
   # /usr/bin/qemu-system-x86_64 -device ?
-  VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER=$'--network 'network=default,model.type=e1000e,mac.address=$ETH0_METADATA_MAC,address.type=pci,address.multifunction=$PCI_MULTI_FUNCTION,address.domain=0x$PCI_DOMAIN,address.bus=0x$PCI_BUS,address.slot=0x$PCI_SLOT,address.function=0x$PCI_FUNCTION$' '
+  # Create virtual network adapter using the same MAC Address and PCI address as eth0
+  # The virtual network adapter is used as a fallback for servers that don't support IOMMU / PCI Passthrough
+  
+  ETH0_PCI_DOMAIN=$(echo $ETH0_PCI_ID | cut -d ":" -f1)
+  ETH0_PCI_BUS=$(echo $ETH0_PCI_ID | cut -d ":" -f2)
+  ETH0_PCI_SLOT=$(echo $ETH0_PCI_ID | cut -d ":" -f3 | cut -d "." -f1)
+  ETH0_PCI_FUNCTION=$(echo $ETH0_PCI_ID | cut -d ":" -f3 | cut -d "." -f2)
+
+  # Count how many functions are available for a specific pci device
+  ETH0_PCI_DEV_ADDRESS=$(echo $ETH0_PCI_ID | cut -d "." -f1)
+  ETH0_PCI_DEV_FUNCTION_COUNT=$(lspci -D -s $ETH0_PCI_DEV_ADDRESS.* | wc -l)
+
+  if [ "$ETH0_PCI_DEV_FUNCTION_COUNT" -gt "1" ]; then
+      # echo "PCI device is multifunction capable"
+      ETH0_PCI_MULTI_FUNCTION=on
+  else
+      ETH0_PCI_MULTI_FUNCTION=off
+  fi
+  
+  VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER=$'--network 'network=default,model.type=e1000e,mac.address=$ETH0_METADATA_MAC,address.type=pci,address.multifunction=$ETH0_PCI_MULTI_FUNCTION,address.domain=0x$ETH0_PCI_DOMAIN,address.bus=0x$ETH0_PCI_BUS,address.slot=0x$ETH0_PCI_SLOT,address.function=0x$ETH0_PCI_FUNCTION$' '
   
 done
 
@@ -718,6 +739,8 @@ if [ "$IOMMU_STATE" == "disabled" ]; then
 
     NUM=0
 
+    # Fallback to creating virtual disks when IOMMU / PCI Passthrough is disabled by using qemu block device passthrough
+
     for LINE in $(ls -l /sys/block/ | grep "sd" | awk '{print $9}')
     do
         NUM=$(( NUM + 1 ))
@@ -736,7 +759,7 @@ if [ "$IOMMU_STATE" == "disabled" ]; then
 
     NUM=$(( NUM + 1 ))
     
-    # Don't add PCI devices as it's not supported when IOMMU is disabled
+    # Don't add PCI devices as it's not supported when IOMMU / PCI Passthrough is disabled
     # Use virtual network adapter and storage disks instead
     echo "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH--disk device=cdrom,bus=sata,boot.order=$NUM"
     eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_VIRTUAL_NETWORK_ADAPTER$VIRT_INSTALL_VIRTUAL_STORAGE_DISKS_PASSTHROUGH--disk device=cdrom,bus=sata,boot.order=$NUM"
