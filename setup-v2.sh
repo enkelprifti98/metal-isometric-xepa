@@ -1056,6 +1056,7 @@ fi
 
 echo "waiting for the primary management interface \$ETH0_IF_NAME to be available on the host..."
 sleep 15
+echo
 
 ifdown \$ETH0_IF_NAME
 ifup \$ETH0_IF_NAME
