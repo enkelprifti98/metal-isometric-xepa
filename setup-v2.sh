@@ -1021,10 +1021,10 @@ if [ "\$XEPA_VM_STATE" != "shut off" ]; then
     virsh shutdown xepa
 
     # Wait 20 seconds for the xepa VM to gracefully shut down
-    echo "Waiting 20 seconds for the xepa VM to shut down gracefully"
+    echo "Waiting up to 60 seconds for the xepa VM to shut down gracefully"
     XEPA_VM_STATE=\$(virsh domstate xepa)
     SECONDS=1
-    while [ "\$XEPA_VM_STATE" != "shut off" ] && [ \$SECONDS -lt 21 ]; do
+    while [ "\$XEPA_VM_STATE" != "shut off" ] && [ \$SECONDS -lt 61 ]; do
         sleep 2
         XEPA_VM_STATE=\$(virsh domstate xepa)
         echo "XEPA VM State: \$XEPA_VM_STATE"
@@ -1067,6 +1067,8 @@ ifup \$ETH0_IF_NAME
 ip route del default
 ip route add default via \$ETH0_PUBLIC_IPV4_GATEWAY
 ifdown \$MANAGEMENT_IF_NAME
+
+sleep 5
 
 # Check for internet connectivity
 wget -q --spider http://google.com
