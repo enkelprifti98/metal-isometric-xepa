@@ -1010,6 +1010,8 @@ VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
 NETWORK_PORT_ID=$NETWORK_PORT_ID
 
+if (virsh list --all | grep xepa); then
+
 XEPA_VM_STATE=\$(virsh domstate xepa)
 
 # if [ "\$XEPA_VM_STATE" == "running" ]; then
@@ -1038,6 +1040,8 @@ if [ "\$XEPA_VM_STATE" != "shut off" ]; then
 fi
 
 virsh undefine xepa
+
+fi
 
 SECONDS=1
 while [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ] && [ \$SECONDS -lt 21 ]; do
