@@ -1039,7 +1039,7 @@ if [ "\$XEPA_VM_STATE" != "shut off" ]; then
     virsh destroy xepa
 fi
 
-virsh undefine xepa
+virsh undefine xepa --nvram
 
 fi
 
