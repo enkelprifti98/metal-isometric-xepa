@@ -1010,7 +1010,7 @@ VLAN_UUID=$VLAN_UUID
 IP_UUID=$IP_UUID
 NETWORK_PORT_ID=$NETWORK_PORT_ID
 
-if (virsh list --all | grep xepa); then
+if (virsh list --all | grep xepa > /dev/null); then
 
 XEPA_VM_STATE=\$(virsh domstate xepa)
 
@@ -1059,7 +1059,7 @@ if [ -z "\$(ls -d /sys/class/net/*/ | cut -d '/' -f5 | grep "\$ETH0_IF_NAME")" ]
 fi
 
 echo "waiting for the primary management interface \$ETH0_IF_NAME to be available on the host..."
-sleep 15
+# sleep 15
 echo
 
 ifdown \$ETH0_IF_NAME
