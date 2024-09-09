@@ -92,9 +92,9 @@ Once the Equinix Metal instance has completed provisioning, click on it so that 
 
 You will notice that the Operating System now says `Alpine 3` as that is the Rescue OS. This will be temporary and will change back to `Custom iPXE` after getting out of the Rescue Mode.
 
-While the instance is transitioning to Rescue Mode, you can monitor the node through the [Out-of-Band console](https://deploy.equinix.com/developers/docs/metal/resilience-recovery/serial-over-ssh/) if you wish.
+While the instance is transitioning to Rescue Mode, you can monitor the node through the [Out-of-Band console](https://deploy.equinix.com/developers/docs/metal/resilience-recovery/serial-over-ssh/).
 
-To access the Rescue Mode environment, you can either use the Out-of-Band console or [SSH](https://deploy.equinix.com/developers/docs/metal/identity-access-management/ssh-keys/) into it through the management IP address. It's recommended to use the Out-of-Band console. Once the server gets to the Rescue OS login prompt, type `root` and press `Enter` to log in.
+To access the Rescue Mode environment, you can use the Out-of-Band console. Once the server gets to the Rescue OS login prompt, type `root` and press `Enter` to log in.
 
 The Rescue Mode environment should look like the following:
 
