@@ -190,7 +190,7 @@ On the left sidebar of the virtual hardware details page click on `SATA CDROM 1`
 
 ![virt-manager-xepa-vm-add-iso](/images/virt-manager-xepa-vm-add-iso.png)
 
-A new window will appear to locate the ISO file. Go to the Downloads folder or anywhere else that your ISO file might be located in and select it as the ISO media by double clicking the ISO file or click the `Open` button. Then click `Apply` to save the ISO media to the SATA CDROM.
+A new window will appear to locate the ISO file. Go to the Downloads folder or anywhere else that your ISO file might be located in and select it as the ISO media by double clicking the ISO file or click the `Open` button. Then click `Apply` to save the ISO media to the SATA CDROM. A prompt may appear saying that `The emulator may not have search permissions for the path to the ISO file` and asking you to correct it now, click the `Yes` button.
 
 ![find-downloads-folder](/images/find-downloads-folder.png)
 
@@ -236,7 +236,7 @@ However, for other ISO images the detection may not work. You need to uncheck th
 
 ![virt-manager-generic-os](/images/virt-manager-generic-os.png)
 
-After you have chosen your ISO file, click the `Forward` button. A prompt will appear saying that `The emulator may not have search permissions for the path to the ISO file` and asking you to correct it now, click the `Yes` button.
+After you have chosen your ISO file, click the `Forward` button. A prompt may appear saying that `The emulator may not have search permissions for the path to the ISO file` and asking you to correct it now, click the `Yes` button.
 
 Then you need to allocate the RAM and CPU amount to the VM. I personally use 4096 MB (4 GB) and 4 CPUs but feel free to adjust those to your preference.
 
