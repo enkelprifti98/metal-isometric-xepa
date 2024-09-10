@@ -266,6 +266,7 @@ clear
 
 ETH0_PUBLIC_IPV4=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .address")
 ETH0_PUBLIC_IPV4_NETMASK=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .netmask")
+ETH0_PUBLIC_IPV4_CIDR=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .cidr")
 ETH0_PUBLIC_IPV4_GATEWAY=$(echo $METADATA | jq -r ".network.addresses[] | select(.public == true) | select(.address_family == 4) | .gateway")
 
 INSTANCE_ID=$(echo $METADATA | jq -r .id)
@@ -675,7 +676,7 @@ echo "$VIRT_INSTALL_PCI_DEVICES"
 # It works by evaluating the content of the string as shell code
 # eval "$VIRT_INSTALL_PARAMS$VIRT_INSTALL_PCI_DEVICES"
 
-VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot '
+VIRT_INSTALL_PARAMS='virt-install --name xepa --description "XEPA ISO Installer VM" --os-variant=generic --arch x86_64 --machine q35 --sysinfo host --cpu host-passthrough --vcpus=8 --ram=30000 --import --serial pty,target.port=0 --serial pty,target.port=1 --tpm model=tpm-crb,type=emulator,version=2.0 --noreboot --noautoconsole '
 
 # Useful virt-install options
 # --os-variant detect=off \
