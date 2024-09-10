@@ -839,6 +839,7 @@ echo "PROJECT ID: $PROJECT_UUID"
                 IP_UUID=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .id)
                 SERVER_IP=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .address)
                 NETMASK=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .netmask)
+                CIDR=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .cidr)
                 GATEWAY=$(echo $ELASTIC_IP_CHECK_IF_EXISTS | jq -r .gateway)
                 ELASTIC_IP_BLOCK_CREATED=true
                 echo "Done..."
